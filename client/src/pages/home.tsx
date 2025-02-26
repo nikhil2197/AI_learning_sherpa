@@ -78,10 +78,10 @@ export default function Home() {
         {/* Hero Section */}
         <section className="text-center space-y-4">
           <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent leading-tight">
-            AI-Powered Tools for Better Decisions
+            Clear Choice AI
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
-            Helping Indian users make informed choices about insurance and education
+            Helping Indian customers cut through the bullshit and buy the best products for their needs
           </p>
         </section>
 
