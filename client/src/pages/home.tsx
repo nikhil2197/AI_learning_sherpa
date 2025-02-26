@@ -74,27 +74,27 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-16 space-y-16">
+      <div className="container mx-auto px-4 py-8 md:py-16 space-y-8 md:space-y-16">
         {/* Hero Section */}
         <section className="text-center space-y-4">
-          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent leading-tight">
             AI-Powered Tools for Better Decisions
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
             Helping Indian users make informed choices about insurance and education
           </p>
         </section>
 
         {/* Mission Statement */}
-        <section className="max-w-4xl mx-auto space-y-6">
-          <Card>
+        <section className="max-w-4xl mx-auto space-y-6 px-4">
+          <Card className="shadow-sm">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-xl md:text-2xl">
                 <BrainCircuit className="h-6 w-6" />
                 Mission
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4 text-lg">
+            <CardContent className="space-y-4 text-base md:text-lg">
               <p>
                 I'm creating a collection of AI-based applications that help Indian users
                 navigate complex purchasing decisions for insurance and education.
@@ -112,10 +112,10 @@ export default function Home() {
         </section>
 
         {/* Creator Info */}
-        <section className="max-w-4xl mx-auto">
-          <Card>
+        <section className="max-w-4xl mx-auto px-4">
+          <Card className="shadow-sm">
             <CardHeader>
-              <CardTitle>Creator</CardTitle>
+              <CardTitle className="text-xl md:text-2xl">Creator</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p>
@@ -124,7 +124,7 @@ export default function Home() {
               <p>
                 My other hobbies involve Food, Sports and Politics.
               </p>
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <Button variant="outline" asChild>
                   <a
                     href="https://www.linkedin.com/in/nikhil2197/"
@@ -155,10 +155,10 @@ export default function Home() {
         </section>
 
         {/* Feedback Form */}
-        <section className="w-full space-y-6">
-          <Card>
+        <section className="w-full space-y-6 px-4">
+          <Card className="shadow-sm">
             <CardHeader>
-              <CardTitle>Share Your Details</CardTitle>
+              <CardTitle className="text-xl md:text-2xl">Share Your Details</CardTitle>
               <CardDescription>
                 If you use these tools, leave your contact information to help Nikhil gather feedback and improve the experience
               </CardDescription>
@@ -167,7 +167,7 @@ export default function Home() {
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit((data) => mutation.mutate(data))}
-                  className="space-y-4"
+                  className="space-y-6"
                 >
                   <FormField
                     control={form.control}
@@ -176,7 +176,7 @@ export default function Home() {
                       <FormItem>
                         <FormLabel>Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="Your name" {...field} />
+                          <Input className="w-full" placeholder="Your name" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -189,7 +189,7 @@ export default function Home() {
                       <FormItem>
                         <FormLabel>Email</FormLabel>
                         <FormControl>
-                          <Input placeholder="your@email.com" {...field} />
+                          <Input className="w-full" placeholder="your@email.com" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -228,24 +228,24 @@ export default function Home() {
         </section>
 
         {/* Live Projects */}
-        <section className="w-full space-y-6">
-          <h2 className="text-3xl font-bold text-center">Live Projects</h2>
-          <Card>
-            <CardContent className="p-6">
+        <section className="w-full space-y-6 px-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-center">Live Projects</h2>
+          <Card className="shadow-sm">
+            <CardContent className="p-4 md:p-6 overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Project Name</TableHead>
-                    <TableHead>Project Use Case</TableHead>
-                    <TableHead className="text-right">Action</TableHead>
+                    <TableHead className="whitespace-nowrap">Project Name</TableHead>
+                    <TableHead className="whitespace-nowrap">Project Use Case</TableHead>
+                    <TableHead className="text-right whitespace-nowrap">Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {projects.map((project) => (
                     <TableRow key={project.name}>
-                      <TableCell className="font-medium">{project.name}</TableCell>
+                      <TableCell className="font-medium whitespace-nowrap">{project.name}</TableCell>
                       <TableCell>{project.description}</TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="text-right whitespace-nowrap">
                         <Button variant="outline" asChild>
                           <a
                             href={project.url}
