@@ -24,6 +24,14 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { insertFeedbackSchema, type InsertFeedback } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const projects = [
   {
@@ -132,35 +140,46 @@ export default function Home() {
         </section>
 
         {/* Live Projects */}
-        <section className="space-y-6">
+        <section className="w-full space-y-6">
           <h2 className="text-3xl font-bold text-center">Live Projects</h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            {projects.map((project) => (
-              <Card key={project.name}>
-                <CardHeader>
-                  <CardTitle>{project.name}</CardTitle>
-                  <CardDescription>{project.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button variant="outline" asChild>
-                    <a 
-                      href={project.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2"
-                    >
-                      View Project
-                      <ExternalLink className="h-4 w-4" />
-                    </a>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <Card>
+            <CardContent className="p-6">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Project Name</TableHead>
+                    <TableHead>Project Use Case</TableHead>
+                    <TableHead className="text-right">Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {projects.map((project) => (
+                    <TableRow key={project.name}>
+                      <TableCell className="font-medium">{project.name}</TableCell>
+                      <TableCell>{project.description}</TableCell>
+                      <TableCell className="text-right">
+                        <Button variant="outline" asChild>
+                          <a
+                            href={project.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2"
+                          >
+                            Get Started
+                            <ExternalLink className="h-4 w-4" />
+                          </a>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
         </section>
 
         {/* Feedback Form */}
-        <section className="max-w-md mx-auto space-y-6">
+        <section className="w-full space-y-6">
           <Card>
             <CardHeader>
               <CardTitle>Share Your Details</CardTitle>
