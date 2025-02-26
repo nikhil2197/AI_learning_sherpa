@@ -131,13 +131,41 @@ export default function Home() {
           </Card>
         </section>
 
-        {/* Contact Form */}
+        {/* Live Projects */}
+        <section className="space-y-6">
+          <h2 className="text-3xl font-bold text-center">Live Projects</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            {projects.map((project) => (
+              <Card key={project.name}>
+                <CardHeader>
+                  <CardTitle>{project.name}</CardTitle>
+                  <CardDescription>{project.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button variant="outline" asChild>
+                    <a 
+                      href={project.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2"
+                    >
+                      View Project
+                      <ExternalLink className="h-4 w-4" />
+                    </a>
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        {/* Feedback Form */}
         <section className="max-w-md mx-auto space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Stay Updated</CardTitle>
+              <CardTitle>Share Your Details</CardTitle>
               <CardDescription>
-                Leave your details to receive updates and provide feedback
+                If you use these tools, leave your contact information to help Nikhil gather feedback and improve the experience
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -202,34 +230,6 @@ export default function Home() {
               </Form>
             </CardContent>
           </Card>
-        </section>
-
-        {/* Live Projects */}
-        <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-center">Live Projects</h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            {projects.map((project) => (
-              <Card key={project.name}>
-                <CardHeader>
-                  <CardTitle>{project.name}</CardTitle>
-                  <CardDescription>{project.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button variant="outline" asChild>
-                    <a 
-                      href={project.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2"
-                    >
-                      View Project
-                      <ExternalLink className="h-4 w-4" />
-                    </a>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
         </section>
       </div>
     </div>
