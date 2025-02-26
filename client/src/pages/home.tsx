@@ -27,14 +27,9 @@ import { apiRequest } from "@/lib/queryClient";
 
 const projects = [
   {
-    name: "Insurance Advisor",
+    name: "Auto Insurance Advisor",
     description: "AI-powered insurance recommendation engine",
     url: "https://replit.com/@nikhilramesh/insurance-advisor",
-  },
-  {
-    name: "Education Pathfinder",
-    description: "Personalized education program suggestions",
-    url: "https://replit.com/@nikhilramesh/edu-pathfinder", 
   }
 ];
 
@@ -114,52 +109,26 @@ export default function Home() {
             <CardHeader>
               <CardTitle>Creator</CardTitle>
             </CardHeader>
-            <CardContent className="flex items-center justify-between">
-              <div>
-                <h3 className="text-xl font-semibold">Nikhil Ramesh</h3>
-                <p className="text-muted-foreground">Building AI tools for better decision making</p>
-              </div>
+            <CardContent className="space-y-4">
+              <p>
+                Hey my name is Nikhil Ramesh and this is a site I am using to publicly document my learning journey in building AI tools. My day job lies at the intersection of strategy, ops and product at Openhouse - an early stage educations startup in Bengaluru. Prior to Openhouse I was a management consultant in the US and have earned my Bachelors Degree at Northwestern.
+              </p>
+              <p>
+                My other hobbies involve Food, Sports and Politics.
+              </p>
               <Button variant="outline" asChild>
                 <a
-                  href="https://www.linkedin.com/in/nikhilramesh"
+                  href="https://www.linkedin.com/in/nikhil2197/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2"
                 >
                   <Linkedin className="h-4 w-4" />
-                  Connect on LinkedIn
+                  Connect with me on LinkedIn
                 </a>
               </Button>
             </CardContent>
           </Card>
-        </section>
-
-        {/* Projects */}
-        <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-center">Projects</h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            {projects.map((project) => (
-              <Card key={project.name}>
-                <CardHeader>
-                  <CardTitle>{project.name}</CardTitle>
-                  <CardDescription>{project.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button variant="outline" asChild>
-                    <a 
-                      href={project.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2"
-                    >
-                      View Project
-                      <ExternalLink className="h-4 w-4" />
-                    </a>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
         </section>
 
         {/* Contact Form */}
@@ -233,6 +202,34 @@ export default function Home() {
               </Form>
             </CardContent>
           </Card>
+        </section>
+
+        {/* Live Projects */}
+        <section className="space-y-6">
+          <h2 className="text-3xl font-bold text-center">Live Projects</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            {projects.map((project) => (
+              <Card key={project.name}>
+                <CardHeader>
+                  <CardTitle>{project.name}</CardTitle>
+                  <CardDescription>{project.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button variant="outline" asChild>
+                    <a 
+                      href={project.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2"
+                    >
+                      View Project
+                      <ExternalLink className="h-4 w-4" />
+                    </a>
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </section>
       </div>
     </div>
