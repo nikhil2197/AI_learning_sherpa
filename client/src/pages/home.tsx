@@ -86,30 +86,7 @@ export default function Home() {
           </p>
         </section>
 
-        {/* Mission Statement */}
-        <section className="max-w-4xl mx-auto space-y-6 px-4">
-          <Card className="shadow-sm">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-xl md:text-2xl">
-                <BrainCircuit className="h-6 w-6" />
-                Mission
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-base md:text-lg">
-              <p>
-                I'm creating a collection of AI-based applications that help
-                Indian users ensure that the products they buy are the products
-                they truly need.
-              </p>
-              <p className="text-muted-foreground">
-                <Sparkles className="h-4 w-4 inline mr-2" />
-                These projects are actively being developed on Replit. While I
-                thoroughly test each application, the recommendations are
-                continually being refined for accuracy and reliability.
-              </p>
-            </CardContent>
-          </Card>
-        </section>
+        
 
         {/* Creator Info */}
         <section className="max-w-4xl mx-auto px-4">
@@ -290,6 +267,20 @@ export default function Home() {
                   ))}
                 </TableBody>
               </Table>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* AI Disclaimer */}
+        <section className="max-w-4xl mx-auto px-4">
+          <Card className="shadow-sm">
+            <CardContent className="p-4">
+              <p className="text-muted-foreground">
+                <Sparkles className="h-4 w-4 inline mr-2" />
+                These projects are actively being developed on Replit. While I
+                thoroughly test each application, the recommendations are
+                continually being refined for accuracy and reliability.
+              </p>
             </CardContent>
           </Card>
         </section>
