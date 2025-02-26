@@ -124,56 +124,32 @@ export default function Home() {
               <p>
                 My other hobbies involve Food, Sports and Politics.
               </p>
-              <Button variant="outline" asChild>
-                <a
-                  href="https://www.linkedin.com/in/nikhil2197/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2"
-                >
-                  <Linkedin className="h-4 w-4" />
-                  Connect with me on LinkedIn
-                </a>
-              </Button>
-            </CardContent>
-          </Card>
-        </section>
-
-        {/* Live Projects */}
-        <section className="w-full space-y-6">
-          <h2 className="text-3xl font-bold text-center">Live Projects</h2>
-          <Card>
-            <CardContent className="p-6">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Project Name</TableHead>
-                    <TableHead>Project Use Case</TableHead>
-                    <TableHead className="text-right">Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {projects.map((project) => (
-                    <TableRow key={project.name}>
-                      <TableCell className="font-medium">{project.name}</TableCell>
-                      <TableCell>{project.description}</TableCell>
-                      <TableCell className="text-right">
-                        <Button variant="outline" asChild>
-                          <a
-                            href={project.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2"
-                          >
-                            Get Started
-                            <ExternalLink className="h-4 w-4" />
-                          </a>
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              <div className="flex gap-4">
+                <Button variant="outline" asChild>
+                  <a
+                    href="https://www.linkedin.com/in/nikhil2197/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2"
+                  >
+                    <Linkedin className="h-4 w-4" />
+                    Connect with me on LinkedIn
+                  </a>
+                </Button>
+                <Button variant="outline" asChild>
+                  <a
+                    href="https://x.com/nikhil2197"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2"
+                  >
+                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                    </svg>
+                    Follow me on Twitter
+                  </a>
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </section>
@@ -247,6 +223,45 @@ export default function Home() {
                   </Button>
                 </form>
               </Form>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* Live Projects */}
+        <section className="w-full space-y-6">
+          <h2 className="text-3xl font-bold text-center">Live Projects</h2>
+          <Card>
+            <CardContent className="p-6">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Project Name</TableHead>
+                    <TableHead>Project Use Case</TableHead>
+                    <TableHead className="text-right">Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {projects.map((project) => (
+                    <TableRow key={project.name}>
+                      <TableCell className="font-medium">{project.name}</TableCell>
+                      <TableCell>{project.description}</TableCell>
+                      <TableCell className="text-right">
+                        <Button variant="outline" asChild>
+                          <a
+                            href={project.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2"
+                          >
+                            Get Started
+                            <ExternalLink className="h-4 w-4" />
+                          </a>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </CardContent>
           </Card>
         </section>
