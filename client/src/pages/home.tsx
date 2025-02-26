@@ -74,9 +74,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 md:py-16 space-y-8 md:space-y-16">
+      <div className="container mx-auto px-4 py-4 md:py-8 space-y-6 md:space-y-12">
         {/* Hero Section */}
-        <section className="text-center space-y-4">
+        <section className="text-center space-y-2">
           <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent leading-tight">
             Clear Choice AI
           </h1>
@@ -84,6 +84,55 @@ export default function Home() {
             Helping Indian customers cut through the bullshit and buy the best
             products for their needs
           </p>
+        </section>
+
+        {/* Live Projects */}
+        <section className="w-full space-y-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-center">
+            Live Projects
+          </h2>
+          <Card className="shadow-sm">
+            <CardContent className="p-2 md:p-6 overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="whitespace-nowrap">
+                      Project Name
+                    </TableHead>
+                    <TableHead className="whitespace-nowrap">
+                      Project Use Case
+                    </TableHead>
+                    <TableHead className="text-right whitespace-nowrap">
+                      Action
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {projects.map((project) => (
+                    <TableRow key={project.name}>
+                      <TableCell className="font-medium whitespace-nowrap">
+                        {project.name}
+                      </TableCell>
+                      <TableCell>{project.description}</TableCell>
+                      <TableCell className="text-right whitespace-nowrap">
+                        <Button variant="outline" asChild>
+                          <a
+                            href={project.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2"
+                          >
+                            Get Started
+                            <ExternalLink className="h-4 w-4" />
+                          </a>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
         </section>
 
         
@@ -222,54 +271,7 @@ export default function Home() {
           </Card>
         </section>
 
-        {/* Live Projects */}
-        <section className="w-full space-y-6 px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center">
-            Live Projects
-          </h2>
-          <Card className="shadow-sm">
-            <CardContent className="p-4 md:p-6 overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="whitespace-nowrap">
-                      Project Name
-                    </TableHead>
-                    <TableHead className="whitespace-nowrap">
-                      Project Use Case
-                    </TableHead>
-                    <TableHead className="text-right whitespace-nowrap">
-                      Action
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {projects.map((project) => (
-                    <TableRow key={project.name}>
-                      <TableCell className="font-medium whitespace-nowrap">
-                        {project.name}
-                      </TableCell>
-                      <TableCell>{project.description}</TableCell>
-                      <TableCell className="text-right whitespace-nowrap">
-                        <Button variant="outline" asChild>
-                          <a
-                            href={project.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2"
-                          >
-                            Get Started
-                            <ExternalLink className="h-4 w-4" />
-                          </a>
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </section>
+        
 
         {/* AI Disclaimer */}
         <section className="max-w-4xl mx-auto px-4">
