@@ -38,7 +38,7 @@ const projects = [
     name: "Auto Insurance Advisor",
     description: "AI-powered insurance recommendation engine",
     url: "https://replit.com/@nikhilramesh/insurance-advisor",
-  }
+  },
 ];
 
 export default function Home() {
@@ -81,7 +81,8 @@ export default function Home() {
             Clear Choice AI
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
-            Helping Indian customers cut through the bullshit and buy the best products for their needs
+            Helping Indian customers cut through the bullshit and buy the best
+            products for their needs
           </p>
         </section>
 
@@ -96,10 +97,9 @@ export default function Home() {
             </CardHeader>
             <CardContent className="space-y-4 text-base md:text-lg">
               <p>
-                I'm creating a collection of AI-based applications that help Indian users
-                navigate complex purchasing decisions for insurance and education.
-                My goal is to cut through the marketing noise and provide clear,
-                personalized recommendations based on your specific needs.
+                I'm creating a collection of AI-based applications that help
+                Indian users ensure that the products they buy are the products
+                they truly need.
               </p>
               <p className="text-muted-foreground">
                 <Sparkles className="h-4 w-4 inline mr-2" />
@@ -119,11 +119,14 @@ export default function Home() {
             </CardHeader>
             <CardContent className="space-y-4">
               <p>
-                Hey my name is Nikhil Ramesh and this is a site I am using to publicly document my learning journey in building AI tools. My day job lies at the intersection of strategy, ops and product at Openhouse - an early stage educations startup in Bengaluru. Prior to Openhouse I was a management consultant in the US and have earned my Bachelors Degree at Northwestern.
+                Hey my name is Nikhil Ramesh and this is a site I am using to
+                publicly document my learning journey in building AI tools. My
+                day job lies at the intersection of strategy, ops and product at
+                Openhouse - an early stage education startup in Bengaluru. Prior
+                to Openhouse I was a management consultant in the US and have
+                earned my Bachelors Degree at Northwestern.
               </p>
-              <p>
-                My other hobbies involve Food, Sports and Politics.
-              </p>
+              <p>My other hobbies involve Food, Sports and Politics.</p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button variant="outline" asChild>
                   <a
@@ -143,7 +146,11 @@ export default function Home() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-2"
                   >
-                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                    <svg
+                      className="h-4 w-4"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                     </svg>
                     Follow me on Twitter
@@ -158,9 +165,12 @@ export default function Home() {
         <section className="w-full space-y-6 px-4">
           <Card className="shadow-sm">
             <CardHeader>
-              <CardTitle className="text-xl md:text-2xl">Share Your Details</CardTitle>
+              <CardTitle className="text-xl md:text-2xl">
+                Share Your Details
+              </CardTitle>
               <CardDescription>
-                If you use these tools, leave your contact information to help Nikhil gather feedback and improve the experience
+                If you use these tools, leave your contact information to help
+                Nikhil gather feedback and improve the experience
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -176,7 +186,11 @@ export default function Home() {
                       <FormItem>
                         <FormLabel>Name</FormLabel>
                         <FormControl>
-                          <Input className="w-full" placeholder="Your name" {...field} />
+                          <Input
+                            className="w-full"
+                            placeholder="Your name"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -189,7 +203,11 @@ export default function Home() {
                       <FormItem>
                         <FormLabel>Email</FormLabel>
                         <FormControl>
-                          <Input className="w-full" placeholder="your@email.com" {...field} />
+                          <Input
+                            className="w-full"
+                            placeholder="your@email.com"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -229,21 +247,31 @@ export default function Home() {
 
         {/* Live Projects */}
         <section className="w-full space-y-6 px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center">Live Projects</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-center">
+            Live Projects
+          </h2>
           <Card className="shadow-sm">
             <CardContent className="p-4 md:p-6 overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="whitespace-nowrap">Project Name</TableHead>
-                    <TableHead className="whitespace-nowrap">Project Use Case</TableHead>
-                    <TableHead className="text-right whitespace-nowrap">Action</TableHead>
+                    <TableHead className="whitespace-nowrap">
+                      Project Name
+                    </TableHead>
+                    <TableHead className="whitespace-nowrap">
+                      Project Use Case
+                    </TableHead>
+                    <TableHead className="text-right whitespace-nowrap">
+                      Action
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {projects.map((project) => (
                     <TableRow key={project.name}>
-                      <TableCell className="font-medium whitespace-nowrap">{project.name}</TableCell>
+                      <TableCell className="font-medium whitespace-nowrap">
+                        {project.name}
+                      </TableCell>
                       <TableCell>{project.description}</TableCell>
                       <TableCell className="text-right whitespace-nowrap">
                         <Button variant="outline" asChild>
