@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { BrainCircuit, ExternalLink, Sparkles } from "lucide-react";
+import { BrainCircuit, ExternalLink, Sparkles, Linkedin } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 import { Button } from "@/components/ui/button";
@@ -75,10 +75,10 @@ export default function Home() {
         {/* Hero Section */}
         <section className="text-center space-y-4">
           <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-            Nikhil Ramesh
+            AI-Powered Tools for Better Decisions
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Building AI-powered tools to help Indian users make better decisions
+            Helping Indian users make informed choices about insurance and education
           </p>
         </section>
 
@@ -104,6 +104,32 @@ export default function Home() {
                 thoroughly test each application, the recommendations are
                 continually being refined for accuracy and reliability.
               </p>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* Creator Info */}
+        <section className="max-w-4xl mx-auto">
+          <Card>
+            <CardHeader>
+              <CardTitle>Creator</CardTitle>
+            </CardHeader>
+            <CardContent className="flex items-center justify-between">
+              <div>
+                <h3 className="text-xl font-semibold">Nikhil Ramesh</h3>
+                <p className="text-muted-foreground">Building AI tools for better decision making</p>
+              </div>
+              <Button variant="outline" asChild>
+                <a
+                  href="https://www.linkedin.com/in/nikhilramesh"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2"
+                >
+                  <Linkedin className="h-4 w-4" />
+                  Connect on LinkedIn
+                </a>
+              </Button>
             </CardContent>
           </Card>
         </section>
