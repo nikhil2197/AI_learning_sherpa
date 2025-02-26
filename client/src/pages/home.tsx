@@ -135,58 +135,6 @@ export default function Home() {
           </Card>
         </section>
 
-        
-
-        {/* Creator Info */}
-        <section className="max-w-4xl mx-auto px-4">
-          <Card className="shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-xl md:text-2xl">Creator</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p>
-                Hey my name is Nikhil Ramesh and this is a site I am using to
-                publicly document my learning journey in building AI tools. My
-                day job lies at the intersection of strategy, ops and product at
-                Openhouse - an early stage education startup in Bengaluru. Prior
-                to Openhouse I was a management consultant in the US and have
-                earned my Bachelors Degree at Northwestern.
-              </p>
-              <p>My other hobbies involve Food, Sports and Politics.</p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button variant="outline" asChild>
-                  <a
-                    href="https://www.linkedin.com/in/nikhil2197/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2"
-                  >
-                    <Linkedin className="h-4 w-4" />
-                    Connect with me on LinkedIn
-                  </a>
-                </Button>
-                <Button variant="outline" asChild>
-                  <a
-                    href="https://x.com/nikhil2197"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2"
-                  >
-                    <svg
-                      className="h-4 w-4"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                    </svg>
-                    Follow me on Twitter
-                  </a>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
-
         {/* Feedback Form */}
         <section className="w-full space-y-6 px-4">
           <Card className="shadow-sm">
@@ -271,7 +219,57 @@ export default function Home() {
           </Card>
         </section>
 
-        
+
+
+        {/* Creator Info */}
+        <section className="max-w-4xl mx-auto px-4">
+          <Card className="shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-xl md:text-2xl">Creator</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p>
+                Hey my name is Nikhil Ramesh and this is a site I am using to
+                publicly document my learning journey in building AI tools. My
+                day job lies at the intersection of strategy, ops and product at
+                Openhouse - an early stage education startup in Bengaluru. Prior
+                to Openhouse I was a management consultant in the US and have
+                earned my Bachelors Degree at Northwestern.
+              </p>
+              <p>My other hobbies involve Food, Sports and Politics.</p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button variant="outline" asChild>
+                  <a
+                    href="https://www.linkedin.com/in/nikhil2197/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2"
+                  >
+                    <Linkedin className="h-4 w-4" />
+                    Connect with me on LinkedIn
+                  </a>
+                </Button>
+                <Button variant="outline" asChild>
+                  <a
+                    href="https://x.com/nikhil2197"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2"
+                  >
+                    <svg
+                      className="h-4 w-4"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                    </svg>
+                    Follow me on Twitter
+                  </a>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
 
         {/* AI Disclaimer */}
         <section className="max-w-4xl mx-auto px-4">
