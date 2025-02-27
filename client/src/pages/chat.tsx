@@ -39,7 +39,7 @@ export default function Chat() {
         )}
 
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+          <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm z-40">
             <div className="flex items-center gap-2">
               <Loader2 className="h-6 w-6 animate-spin" />
               <p>Loading insurance advisor...</p>
@@ -47,15 +47,25 @@ export default function Chat() {
           </div>
         )}
 
-        <div className="h-[calc(100vh-4rem)] md:p-4">
+        <div className="h-[calc(100vh-4rem)]" style={{ pointerEvents: 'auto' }}>
           <iframe
             src="https://insurance-wizard-rameshnikhil21.replit.app/"
-            className="w-full h-full rounded-none md:rounded-lg border-0 md:border md:border-border"
-            onLoad={() => setIsLoading(false)}
-            onError={() => {
+            className="w-full h-full border-0"
+            style={{ pointerEvents: 'auto', zIndex: 50 }}
+            onLoad={() => {
+              console.log('Chat iframe loaded successfully');
+              setIsLoading(false);
+            }}
+            onError={(e) => {
+              console.error('Chat iframe failed to load:', e);
               setError(true);
               setIsLoading(false);
             }}
+            // Enable all required permissions for cross-origin communication
+            allow="clipboard-write; microphone; camera; payment"
+            sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals allow-downloads allow-presentation allow-top-navigation allow-websockets"
+            // Remove referrer for cross-origin security
+            referrerPolicy="no-referrer"
           />
         </div>
       </div>
