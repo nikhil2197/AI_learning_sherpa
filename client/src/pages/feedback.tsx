@@ -70,7 +70,14 @@ export default function Feedback() {
             <CardContent>
               <div className="mb-8 p-4 bg-muted rounded-lg">
                 <h3 className="font-semibold mb-2">Your Recommendation:</h3>
-                <p className="text-muted-foreground">{lastRecommendation}</p>
+                {lastRecommendation ? (
+                  <p className="text-muted-foreground">{lastRecommendation}</p>
+                ) : (
+                  <p className="text-muted-foreground italic">
+                    It seems you ended the chat before we could provide a detailed recommendation. 
+                    For the best insurance advice, we recommend having a complete conversation with our AI advisor.
+                  </p>
+                )}
               </div>
 
               <Form {...form}>
