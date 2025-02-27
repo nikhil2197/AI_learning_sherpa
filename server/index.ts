@@ -119,8 +119,8 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  // Use port 3000 consistently for deployment compatibility
-  const port = 3000;
+  // Use port 80 for production deployment, otherwise use 3000 for development
+  const port = process.env.NODE_ENV === 'production' ? 80 : 3000;
 
   server.listen({
     port: port,
