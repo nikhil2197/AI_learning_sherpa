@@ -69,10 +69,6 @@ export default function Home() {
           <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent leading-tight">
             Clear Choice AI
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
-            Helping Indian customers cut through the bullshit and buy the best
-            products for their needs
-          </p>
         </section>
 
         {/* What AI Does */}
@@ -81,17 +77,47 @@ export default function Home() {
             <CardHeader>
               <CardTitle className="text-xl md:text-2xl">What does the AI do?</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6">
               <p>
-                Helps Indians cut through the confusing advice and hours of research to:
+                We make your life easier by consolidating all advice in one place, in a way you can actually use it:
               </p>
-              <ol className="list-decimal list-inside space-y-2">
-                <li>Select the right auto insurance coverage</li>
-                <li>Select the right vendor to provide that coverage</li>
-              </ol>
-              <p>
-                All personalized for your individual use case.
-              </p>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="bg-primary/10 rounded-full p-2 mt-0.5">
+                    <span className="font-semibold text-primary">1</span>
+                  </div>
+                  <div>
+                    <h3 className="font-medium">Personal Assessment</h3>
+                    <p className="text-muted-foreground">Asks you questions about your car and driving scenarios</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="bg-primary/10 rounded-full p-2 mt-0.5">
+                    <span className="font-semibold text-primary">2</span>
+                  </div>
+                  <div>
+                    <h3 className="font-medium">Coverage Selection</h3>
+                    <p className="text-muted-foreground">Uses that info to guide you through selecting the best coverage for your needs</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="bg-primary/10 rounded-full p-2 mt-0.5">
+                    <span className="font-semibold text-primary">3</span>
+                  </div>
+                  <div>
+                    <h3 className="font-medium">Provider Recommendation</h3>
+                    <p className="text-muted-foreground">Based on your coverage needs and personal situation, recommends the best insurance provider</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-muted p-3 rounded-md mt-2">
+                <p className="text-sm">
+                  We're 100% focused on what's best for <em>you</em> — saving you time and confusion while ensuring you get the right coverage at the best price.
+                </p>
+              </div>
               <Button
                 className="w-full mt-4"
                 onClick={() => setLocation("/get-started")}
