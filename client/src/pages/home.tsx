@@ -5,13 +5,8 @@ import { BrainCircuit, ExternalLink, Sparkles, Linkedin } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useLocation } from "wouter";
 import {
   Form,
   FormControl,
@@ -24,14 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { insertFeedbackSchema, type InsertFeedback } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+
 
 const projects = [
   {
@@ -71,10 +59,11 @@ export default function Home() {
       });
     },
   });
+  const [, setLocation] = useLocation();
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-4 md:py-8 space-y-6 md:space-y-12">
+      <div className="container mx-auto px-4 py-8 md:py-16 space-y-8 md:space-y-12">
         {/* Hero Section */}
         <section className="text-center space-y-2">
           <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent leading-tight">
@@ -86,157 +75,46 @@ export default function Home() {
           </p>
         </section>
 
-        {/* Live Projects */}
-        <section className="w-full space-y-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center">
-            Live Projects
-          </h2>
-          <Card className="shadow-sm">
-            <CardContent className="p-2 md:p-6 overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="whitespace-nowrap">
-                      Project Name
-                    </TableHead>
-                    <TableHead className="whitespace-nowrap">
-                      Project Use Case
-                    </TableHead>
-                    <TableHead className="text-right whitespace-nowrap">
-                      Action
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {projects.map((project) => (
-                    <TableRow key={project.name}>
-                      <TableCell className="font-medium whitespace-nowrap">
-                        {project.name}
-                      </TableCell>
-                      <TableCell>{project.description}</TableCell>
-                      <TableCell className="text-right whitespace-nowrap">
-                        <Button variant="outline" asChild>
-                          <a
-                            href={project.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2"
-                          >
-                            Get Started
-                            <ExternalLink className="h-4 w-4" />
-                          </a>
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </section>
-
-        {/* Feedback Form */}
-        <section className="w-full space-y-6 px-4">
+        {/* What AI Does */}
+        <section className="max-w-2xl mx-auto px-4">
           <Card className="shadow-sm">
             <CardHeader>
-              <CardTitle className="text-xl md:text-2xl">
-                Share Your Details
-              </CardTitle>
-              <CardDescription>
-                If you use these tools, leave your contact information to help
-                Nikhil gather feedback and improve the experience
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit((data) => mutation.mutate(data))}
-                  className="space-y-6"
-                >
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Name</FormLabel>
-                        <FormControl>
-                          <Input
-                            className="w-full"
-                            placeholder="Your name"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input
-                            className="w-full"
-                            placeholder="your@email.com"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="canContact"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <div className="space-y-1 leading-none">
-                          <FormLabel>
-                            I agree to be contacted for feedback
-                          </FormLabel>
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={mutation.isPending}
-                  >
-                    {mutation.isPending ? "Submitting..." : "Submit"}
-                  </Button>
-                </form>
-              </Form>
-            </CardContent>
-          </Card>
-        </section>
-
-
-
-        {/* Creator Info */}
-        <section className="max-w-4xl mx-auto px-4">
-          <Card className="shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-xl md:text-2xl">Creator</CardTitle>
+              <CardTitle className="text-xl md:text-2xl">What does the AI do?</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p>
-                Hey my name is Nikhil Ramesh and this is a site I am using to
-                publicly document my learning journey in building AI tools. My
-                day job lies at the intersection of strategy, ops and product at
-                Openhouse - an early stage education startup in Bengaluru. Prior
-                to Openhouse I was a management consultant in the US and have
-                earned my Bachelors Degree at Northwestern.
+                Helps Indians cut through the confusing advice and hours of research to:
               </p>
-              <p>My other hobbies involve Food, Sports and Politics.</p>
+              <ol className="list-decimal list-inside space-y-2">
+                <li>Select the right auto insurance coverage</li>
+                <li>Select the right vendor to provide that coverage</li>
+              </ol>
+              <p>
+                All personalized for your individual use case.
+              </p>
+              <Button
+                className="w-full mt-4"
+                onClick={() => setLocation("/get-started")}
+              >
+                Get Started
+              </Button>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* Creator Info */}
+        <section className="max-w-2xl mx-auto px-4">
+          <Card className="shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-xl md:text-2xl">The Creator</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p>
+                Hey my name is Nikhil Ramesh and this is a site I am using to publicly document my learning journey in building AI tools. My day job lies at the intersection of strategy, ops and product at Openhouse - an early stage education startup in Bengaluru. Prior to Openhouse I was a management consultant in the US and have earned my Bachelors Degree at Northwestern.
+              </p>
+              <p>
+                My other hobbies involve Food, Sports and Politics.
+              </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button variant="outline" asChild>
                   <a
@@ -256,31 +134,13 @@ export default function Home() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-2"
                   >
-                    <svg
-                      className="h-4 w-4"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
+                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                     </svg>
                     Follow me on Twitter
                   </a>
                 </Button>
               </div>
-            </CardContent>
-          </Card>
-        </section>
-
-        {/* AI Disclaimer */}
-        <section className="max-w-4xl mx-auto px-4">
-          <Card className="shadow-sm">
-            <CardContent className="p-4">
-              <p className="text-muted-foreground">
-                <Sparkles className="h-4 w-4 inline mr-2" />
-                These projects are actively being developed on Replit. While I
-                thoroughly test each application, the recommendations are
-                continually being refined for accuracy and reliability.
-              </p>
             </CardContent>
           </Card>
         </section>

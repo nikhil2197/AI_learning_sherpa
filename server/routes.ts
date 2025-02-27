@@ -1,10 +1,24 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertFeedbackSchema } from "@shared/schema";
+import { insertUserSchema, insertFeedbackSchema } from "@shared/schema";
 import { ZodError } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  app.post("/api/users", async (req, res) => {
+    try {
+      const user = insertUserSchema.parse(req.body);
+      const result = await storage.createUser(user);
+      res.json(result);
+    } catch (err) {
+      if (err instanceof ZodError) {
+        res.status(400).json({ message: "Invalid user data" });
+        return;
+      }
+      throw err;
+    }
+  });
+
   app.post("/api/feedback", async (req, res) => {
     try {
       const feedback = insertFeedbackSchema.parse(req.body);
