@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { insertFeedbackSchema, type InsertFeedback } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
@@ -23,6 +24,7 @@ export default function Feedback() {
     defaultValues: {
       isConfident: false,
       learnedNew: false,
+      conversation: "",
     },
   });
 
@@ -96,6 +98,24 @@ export default function Feedback() {
                             Did you learn something new by using this?
                           </FormLabel>
                         </div>
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="conversation"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>How can we improve this service?</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Share your suggestions for improvement..."
+                            className="min-h-[100px]"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
