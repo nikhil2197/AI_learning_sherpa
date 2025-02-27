@@ -23,7 +23,6 @@ export default function Feedback() {
   // Calculate chat duration
   const chatStartTime = parseInt(sessionStorage.getItem('chatStartTime') || '0');
   const chatDuration = chatStartTime ? Math.floor((Date.now() - chatStartTime) / 1000) : 0;
-  const lastRecommendation = sessionStorage.getItem('lastRecommendation') || '';
 
   const form = useForm<InsertFeedback>({
     resolver: zodResolver(insertFeedbackSchema),
@@ -31,7 +30,6 @@ export default function Feedback() {
       isConfident: false,
       learnedNew: false,
       conversation: "",
-      lastRecommendation,
       chatDuration,
     },
   });
@@ -48,7 +46,6 @@ export default function Feedback() {
       form.reset();
       // Clear session storage
       sessionStorage.removeItem('chatStartTime');
-      sessionStorage.removeItem('lastRecommendation');
     },
     onError: () => {
       toast({
@@ -68,18 +65,6 @@ export default function Feedback() {
               <CardTitle className="text-xl md:text-2xl">Your Feedback</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="mb-8 p-4 bg-muted rounded-lg">
-                <h3 className="font-semibold mb-2">Your Recommendation:</h3>
-                {lastRecommendation ? (
-                  <p className="text-muted-foreground">{lastRecommendation}</p>
-                ) : (
-                  <p className="text-muted-foreground italic">
-                    It seems you ended the chat before we could provide a detailed recommendation. 
-                    For the best insurance advice, we recommend having a complete conversation with our AI advisor.
-                  </p>
-                )}
-              </div>
-
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit((data) => mutation.mutate(data))}
@@ -98,7 +83,7 @@ export default function Feedback() {
                         </FormControl>
                         <div className="space-y-1 leading-none">
                           <FormLabel>
-                            Do you feel confident that the recommendation is suitable for you?
+                            Do you feel confident about the insurance advice provided?
                           </FormLabel>
                         </div>
                       </FormItem>
@@ -118,7 +103,7 @@ export default function Feedback() {
                         </FormControl>
                         <div className="space-y-1 leading-none">
                           <FormLabel>
-                            Did you learn something new by using this?
+                            Did you learn something new about insurance through this conversation?
                           </FormLabel>
                         </div>
                       </FormItem>

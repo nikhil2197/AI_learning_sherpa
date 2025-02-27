@@ -15,12 +15,6 @@ export default function Chat() {
     sessionStorage.setItem('chatStartTime', Date.now().toString());
   }, []);
 
-  const handleEndChat = () => {
-    // Store a mock last recommendation for now - this should be replaced with actual last recommendation from the chat
-    sessionStorage.setItem('lastRecommendation', 'Based on your vehicle type and usage, we recommend a comprehensive insurance policy with add-ons for zero depreciation and engine protection. Consider insurers like ICICI Lombard or HDFC ERGO for the best coverage at competitive rates.');
-    setLocation("/feedback");
-  };
-
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <div className="container mx-auto px-4 py-8 flex-1 flex flex-col max-w-3xl">
@@ -60,7 +54,7 @@ export default function Chat() {
         <div className="text-center">
           <Button
             size="lg"
-            onClick={handleEndChat}
+            onClick={() => setLocation("/feedback")}
             className="px-8 py-6 text-lg"
           >
             End Conversation
