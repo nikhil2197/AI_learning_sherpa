@@ -23,10 +23,11 @@ const ONE_WEEK = 7 * 24 * 60 * 60 * 1000; // 1 week in milliseconds
 const sessionMiddleware = session({
   secret: SESSION_SECRET,
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false, // Don't create session until something stored
   cookie: { 
     secure: process.env.NODE_ENV === 'production',
-    maxAge: ONE_WEEK
+    maxAge: ONE_WEEK,
+    httpOnly: true // Helps prevent XSS attacks
   }
 });
 
