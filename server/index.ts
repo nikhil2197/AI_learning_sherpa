@@ -65,7 +65,7 @@ app.use((req, res, next) => {
 (async () => {
   // Initialize storage
   const storage = await initStorage();
-  
+
   // Set up PostgreSQL session store if DATABASE_URL is available
   if (process.env.DATABASE_URL) {
     try {
@@ -74,7 +74,7 @@ app.use((req, res, next) => {
         conString: process.env.DATABASE_URL,
         tableName: 'session'
       });
-      
+
       // Update session middleware with PostgreSQL store
       app.use(session({
         store: sessionStore,
@@ -86,7 +86,7 @@ app.use((req, res, next) => {
           maxAge: ONE_WEEK
         }
       }));
-      
+
       log("Using PostgreSQL session store");
     } catch (error) {
       console.error("Failed to initialize PostgreSQL session store:", error);
@@ -99,21 +99,18 @@ app.use((req, res, next) => {
     app.use(sessionMiddleware);
     log("Using memory-based session store");
   }
-  
-  // Initialize routes and get the HTTP server
+
+  // Initialize routes
   const server = await registerRoutes(app, sessionMiddleware);
 
+  // Error handling middleware
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
-
     res.status(status).json({ message });
     throw err;
   });
 
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
   if (app.get("env") === "development") {
     await setupVite(app, server);
   } else {
@@ -123,7 +120,7 @@ app.use((req, res, next) => {
   // Try to serve the app on port 5000, fallback to other ports if needed
   const basePort = 5000;
   let port = basePort;
-  
+
   const startServer = (attemptPort: number) => {
     server.listen({
       port: attemptPort,
@@ -140,6 +137,6 @@ app.use((req, res, next) => {
       }
     });
   };
-  
+
   startServer(port);
 })();

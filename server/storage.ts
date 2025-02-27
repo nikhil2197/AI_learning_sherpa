@@ -1,5 +1,7 @@
+import pg from "pg";
+const { Pool } = pg;
+
 import { type User, type InsertUser, type Feedback, type InsertFeedback } from "@shared/schema";
-import { Pool } from "pg";
 
 export interface IStorage {
   createUser(user: InsertUser): Promise<User>;
