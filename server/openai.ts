@@ -70,7 +70,7 @@ export async function getChatResponse(
 ): Promise<string> {
   return makeOpenAIRequest(async () => {
     const response = await getOpenAIClient().chat.completions.create({
-      model: "gpt-3.5-turbo", // Fallback to a less expensive model
+      model: "gpt-4o", // Using GPT-4o for improved performance
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         ...messages
@@ -88,7 +88,7 @@ export async function getInsuranceRecommendation(
 ): Promise<string> {
   return makeOpenAIRequest(async () => {
     const response = await getOpenAIClient().chat.completions.create({
-      model: "gpt-3.5-turbo", // Fallback to a less expensive model
+      model: "gpt-4o", // Using GPT-4o for improved performance
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         { 
