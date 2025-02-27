@@ -121,8 +121,8 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  // Use port 80 for production deployment, otherwise use 3000 for development
-  const port = process.env.NODE_ENV === "production" ? 5000 : 3000;
+  // Use port 5000 for both production and development to match .replit configuration
+  const port = 5000;
 
   server
     .listen(
