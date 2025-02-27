@@ -6,6 +6,7 @@ export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull(),
+  whatsappNumber: text("whatsapp_number"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -24,9 +25,11 @@ export const insertUserSchema = createInsertSchema(users)
   .pick({
     name: true,
     email: true,
+    whatsappNumber: true,
   })
   .extend({
     email: z.string().email("Please enter a valid email address"),
+    whatsappNumber: z.string().optional(),
   });
 
 export const insertFeedbackSchema = createInsertSchema(feedbacks)

@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { BrainCircuit, ExternalLink, Sparkles, Linkedin } from "lucide-react";
+import { BrainCircuit, ExternalLink, Sparkles, Linkedin, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 import { Button } from "@/components/ui/button";
@@ -125,11 +125,39 @@ export default function Home() {
                 </div>
               </div>
 
+              {/* Info about time estimate - Moved from get-started */}
+              <Card className="shadow-sm bg-primary/10 mt-6">
+                <CardContent className="p-4">
+                  <div className="flex items-start gap-2 text-sm">
+                    <svg className="h-4 w-4 mt-0.5 flex-shrink-0 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10" />
+                      <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    <p>
+                      <span className="font-medium">Please note:</span> This process takes about 5 minutes to collect all information as we guide you to the best possible insurance options. If you already know exactly what you want, feel free to tell our AI advisor directly and we'll skip ahead!
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Disclaimer - Moved from get-started */}
+              <Card className="shadow-sm bg-muted">
+                <CardContent className="p-4">
+                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                    <p>
+                      These recommendations are being actively refined for accuracy and reliability.
+                      While thoroughly tested, please use your judgment when making final decisions.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+
               <Button
                 className="w-full mt-4"
-                onClick={() => setLocation("/get-started")}
+                onClick={() => setLocation("/chat")}
               >
-                Get Started
+                Talk to AI Advisor
               </Button>
             </CardContent>
           </Card>

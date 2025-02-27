@@ -13,9 +13,18 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { insertFeedbackSchema, type InsertFeedback } from "@shared/schema";
+import { insertUserSchema, type InsertUser } from "@shared/schema";
+import * as z from 'zod';
 import { apiRequest } from "@/lib/queryClient";
+
+// Combine user info with feedback fields
+interface FeedbackForm extends InsertUser {
+  isConfident: boolean;
+  learnedNew: boolean;
+  conversation: string;
+}
 
 export default function Feedback() {
   const { toast } = useToast();
@@ -24,19 +33,40 @@ export default function Feedback() {
   const chatStartTime = parseInt(sessionStorage.getItem('chatStartTime') || '0');
   const chatDuration = chatStartTime ? Math.floor((Date.now() - chatStartTime) / 1000) : 0;
 
-  const form = useForm<InsertFeedback>({
-    resolver: zodResolver(insertFeedbackSchema),
+  const form = useForm<FeedbackForm>({
+    resolver: zodResolver(insertUserSchema.extend({
+      isConfident: z.boolean().default(false),
+      learnedNew: z.boolean().default(false),
+      conversation: z.string().optional(),
+    })),
     defaultValues: {
+      name: "",
+      email: "",
+      whatsappNumber: "",
       isConfident: false,
       learnedNew: false,
       conversation: "",
-      chatDuration,
     },
   });
 
   const mutation = useMutation({
-    mutationFn: async (data: InsertFeedback) => {
-      await apiRequest("POST", "/api/feedback", data);
+    mutationFn: async (data: FeedbackForm) => {
+      // First create user
+      const userResponse = await apiRequest("POST", "/api/users", {
+        name: data.name,
+        email: data.email,
+        whatsappNumber: data.whatsappNumber,
+      });
+      const user = await userResponse.json();
+
+      // Then create feedback with user ID
+      await apiRequest("POST", "/api/feedback", {
+        userId: user.id,
+        isConfident: data.isConfident,
+        learnedNew: data.learnedNew,
+        conversation: data.conversation,
+        chatDuration,
+      });
     },
     onSuccess: () => {
       toast({
@@ -70,6 +100,48 @@ export default function Feedback() {
                   onSubmit={form.handleSubmit((data) => mutation.mutate(data))}
                   className="space-y-6"
                 >
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Your name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input placeholder="your@email.com" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="whatsappNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>WhatsApp Number (Optional)</FormLabel>
+                        <FormControl>
+                          <Input placeholder="+1234567890" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                   <FormField
                     control={form.control}
                     name="isConfident"
