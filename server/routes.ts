@@ -5,6 +5,7 @@ import { initStorage } from "./storage";
 import { insertUserSchema, insertFeedbackSchema } from "@shared/schema";
 import { ZodError } from "zod";
 import * as http from "http";
+import { getChatResponse } from "./openai"; // Add this import
 
 // Extended WebSocket interface to store user information
 interface UserWebSocket extends WebSocket {
@@ -143,7 +144,7 @@ export async function registerRoutes(app: Express, sessionMiddleware: any): Prom
     if (userWs && userWs.length > 0) {
       // Return the conversation history from the first active connection
       // (typically there's only one per user)
-      return res.json({ 
+      return res.json({
         history: userWs[0].conversationHistory || [],
         sessionId: userWs[0].sessionId
       });
@@ -153,11 +154,33 @@ export async function registerRoutes(app: Express, sessionMiddleware: any): Prom
     res.json({ history: [], message: "No active conversations" });
   });
 
+  // Add this new endpoint after other API routes
+  app.post("/api/chat", async (req, res) => {
+    try {
+      const { message } = req.body;
+      if (!message) {
+        return res.status(400).json({ message: "Message is required" });
+      }
+
+      // Get response from OpenAI
+      const botResponse = await getChatResponse([{ role: "user", content: message }]);
+
+      res.json({
+        type: 'bot',
+        message: botResponse
+      });
+    } catch (err) {
+      console.error('Chat error:', err);
+      res.status(500).json({ message: "Failed to get response" });
+    }
+  });
+
+
   const httpServer = createServer(app);
 
   // Setup WebSocket server with session integration
-  const wss = new WebSocketServer({ 
-    server: httpServer, 
+  const wss = new WebSocketServer({
+    server: httpServer,
     path: '/ws',
     // Skip client verification
     verifyClient: false
