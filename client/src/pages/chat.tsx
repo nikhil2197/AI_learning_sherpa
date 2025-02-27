@@ -154,15 +154,6 @@ export default function Chat() {
 
         {/* Input Area */}
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-          <div className="max-w-2xl mx-auto mb-3">
-            <Button
-              size="lg"
-              onClick={() => setLocation("/feedback")}
-              className="w-full h-12 text-lg font-medium transition-transform hover:scale-[0.98] active:scale-[0.97]"
-            >
-              End Conversation
-            </Button>
-          </div>
           <form onSubmit={sendMessage} className="max-w-2xl mx-auto flex gap-2">
             <Input
               value={input}
@@ -184,6 +175,15 @@ export default function Chat() {
               )}
             </Button>
           </form>
+          <div className="max-w-2xl mx-auto mt-3">
+            <Button
+              size="lg"
+              onClick={() => setLocation("/feedback")}
+              className="w-full h-12 text-lg font-medium transition-transform hover:scale-[0.98] active:scale-[0.97]"
+            >
+              End Conversation
+            </Button>
+          </div>
         </div>
       </div>
     </div>
