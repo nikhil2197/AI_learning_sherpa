@@ -19,12 +19,20 @@ import { apiRequest } from "@/lib/queryClient";
 
 export default function Feedback() {
   const { toast } = useToast();
+
+  // Calculate chat duration
+  const chatStartTime = parseInt(sessionStorage.getItem('chatStartTime') || '0');
+  const chatDuration = chatStartTime ? Math.floor((Date.now() - chatStartTime) / 1000) : 0;
+  const lastRecommendation = sessionStorage.getItem('lastRecommendation') || '';
+
   const form = useForm<InsertFeedback>({
     resolver: zodResolver(insertFeedbackSchema),
     defaultValues: {
       isConfident: false,
       learnedNew: false,
       conversation: "",
+      lastRecommendation,
+      chatDuration,
     },
   });
 
@@ -38,6 +46,9 @@ export default function Feedback() {
         description: "Your responses help us improve the service.",
       });
       form.reset();
+      // Clear session storage
+      sessionStorage.removeItem('chatStartTime');
+      sessionStorage.removeItem('lastRecommendation');
     },
     onError: () => {
       toast({
@@ -57,6 +68,11 @@ export default function Feedback() {
               <CardTitle className="text-xl md:text-2xl">Your Feedback</CardTitle>
             </CardHeader>
             <CardContent>
+              <div className="mb-8 p-4 bg-muted rounded-lg">
+                <h3 className="font-semibold mb-2">Your Recommendation:</h3>
+                <p className="text-muted-foreground">{lastRecommendation}</p>
+              </div>
+
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit((data) => mutation.mutate(data))}

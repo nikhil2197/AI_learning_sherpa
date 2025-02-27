@@ -1,4 +1,4 @@
-import { pgTable, text, serial, boolean, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, boolean, timestamp, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -15,6 +15,8 @@ export const feedbacks = pgTable("feedbacks", {
   isConfident: boolean("is_confident").notNull(),
   learnedNew: boolean("learned_new").notNull(),
   conversation: text("conversation"),
+  lastRecommendation: text("last_recommendation"),
+  chatDuration: integer("chat_duration"), // in seconds
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -33,6 +35,8 @@ export const insertFeedbackSchema = createInsertSchema(feedbacks)
     isConfident: true,
     learnedNew: true,
     conversation: true,
+    lastRecommendation: true,
+    chatDuration: true,
   });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;

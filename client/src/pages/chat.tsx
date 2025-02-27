@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
@@ -9,6 +9,17 @@ export default function Chat() {
   const [, setLocation] = useLocation();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
+
+  useEffect(() => {
+    // Store chat start time when component mounts
+    sessionStorage.setItem('chatStartTime', Date.now().toString());
+  }, []);
+
+  const handleEndChat = () => {
+    // Store a mock last recommendation for now - this should be replaced with actual last recommendation from the chat
+    sessionStorage.setItem('lastRecommendation', 'Based on your vehicle type and usage, we recommend a comprehensive insurance policy with add-ons for zero depreciation and engine protection. Consider insurers like ICICI Lombard or HDFC ERGO for the best coverage at competitive rates.');
+    setLocation("/feedback");
+  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -49,7 +60,7 @@ export default function Chat() {
         <div className="text-center">
           <Button
             size="lg"
-            onClick={() => setLocation("/feedback")}
+            onClick={handleEndChat}
             className="px-8 py-6 text-lg"
           >
             End Conversation
