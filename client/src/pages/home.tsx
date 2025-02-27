@@ -75,13 +75,14 @@ export default function Home() {
           <Card className="shadow-sm">
             <CardHeader>
               <CardTitle className="text-xl md:text-2xl">
-                What does the AI do?
+                What do we do?
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <p>
-                We help you buy Auto Insurance by consolidating all advice in
-                one place, in a way you can actually use it. Here's how:
+                We're 100% focused on using AI to get the best Motor Insurance
+                for <em>your life</em> — saving you time and confusion. Here's
+                how:
               </p>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
@@ -103,8 +104,8 @@ export default function Home() {
                   <div>
                     <h3 className="font-medium">Coverage Selection</h3>
                     <p className="text-muted-foreground">
-                      Uses that info to guide you through selecting the best
-                      coverage for your needs
+                      Using your assessment to guide you through selecting the
+                      best coverage for your needs
                     </p>
                   </div>
                 </div>
@@ -117,19 +118,13 @@ export default function Home() {
                     <h3 className="font-medium">Provider Recommendation</h3>
                     <p className="text-muted-foreground">
                       Based on your coverage needs and personal situation,
-                      recommends the best insurance provider
+                      recommend the insurance provider that is the right balance
+                      of cost and service
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-muted p-3 rounded-md mt-2">
-                <p className="text-sm">
-                  We're 100% focused on what's best for <em>you</em> — saving
-                  you time and confusion while ensuring you get the right
-                  coverage at the best price.
-                </p>
-              </div>
               <Button
                 className="w-full mt-4"
                 onClick={() => setLocation("/get-started")}
