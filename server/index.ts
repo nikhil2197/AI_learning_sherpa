@@ -69,7 +69,9 @@ app.use((req, res, next) => {
   // Set up PostgreSQL session store if DATABASE_URL is available
   if (process.env.DATABASE_URL) {
     try {
-      pgSession = require('connect-pg-simple')(session);
+      // Dynamic import for ESM compatibility
+      const pgSessionModule = await import('connect-pg-simple');
+      pgSession = pgSessionModule.default(session);
       sessionStore = new pgSession({
         conString: process.env.DATABASE_URL,
         tableName: 'session'
@@ -125,7 +127,6 @@ app.use((req, res, next) => {
     server.listen({
       port: attemptPort,
       host: "0.0.0.0",
-      reusePort: true,
     }, () => {
       log(`serving on port ${attemptPort}`);
     }).on('error', (err: any) => {
@@ -138,5 +139,6 @@ app.use((req, res, next) => {
     });
   };
 
-  startServer(port);
+  // Try starting on port 3000 instead to avoid conflicts with Replit's system
+  startServer(3000);
 })();
