@@ -18,14 +18,14 @@ export default function Chat() {
             <Alert variant="destructive" className="mb-4">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
-                Unable to load the chat interface. Please try refreshing the page.
+                Unable to load the chat interface. Please try refreshing the page or check if the insurance advisor app is running.
               </AlertDescription>
             </Alert>
           ) : null}
 
           <Card className="h-[80vh] relative overflow-hidden">
             <iframe
-              src="https://insurance-advisor.nikhilramesh.repl.co"
+              src={`${window.location.protocol}//${window.location.host}/insurance-advisor`}
               className="w-full h-full border-0"
               title="Insurance Advisor"
               onError={() => setIframeError(true)}
