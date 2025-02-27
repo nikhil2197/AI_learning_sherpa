@@ -119,26 +119,15 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  // Try to serve the app on port 5000, fallback to other ports if needed
-  const basePort = 5000;
-  let port = basePort;
+  // Use port 3000 consistently for deployment compatibility
+  const port = 3000;
 
-  const startServer = (attemptPort: number) => {
-    server.listen({
-      port: attemptPort,
-      host: "0.0.0.0",
-    }, () => {
-      log(`serving on port ${attemptPort}`);
-    }).on('error', (err: any) => {
-      if (err.code === 'EADDRINUSE') {
-        log(`Port ${attemptPort} is in use, trying ${attemptPort + 1}...`);
-        startServer(attemptPort + 1);
-      } else {
-        console.error('Server error:', err);
-      }
-    });
-  };
-
-  // Try starting on port 3000 instead to avoid conflicts with Replit's system
-  startServer(3000);
+  server.listen({
+    port: port,
+    host: "0.0.0.0",
+  }, () => {
+    log(`serving on port ${port}`);
+  }).on('error', (err: any) => {
+    console.error('Server error:', err);
+  });
 })();
