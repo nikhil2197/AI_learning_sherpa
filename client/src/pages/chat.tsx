@@ -17,7 +17,7 @@ export default function Chat() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       {/* Top Navigation */}
-      <div className="h-16 px-4 py-2 border-b border-border bg-background/95 backdrop-blur-md">
+      <div className="h-16 px-4 py-2 border-b border-border bg-background/95 backdrop-blur">
         <Button
           size="lg"
           onClick={() => setLocation("/feedback")}
@@ -30,7 +30,7 @@ export default function Chat() {
       {/* Main chat area with iframe */}
       <div className="flex-1 relative">
         {error && (
-          <Alert variant="destructive" className="absolute top-4 left-4 right-4 z-50">
+          <Alert variant="destructive" className="m-4">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
               Unable to load the insurance advisor. Please try refreshing the page.
@@ -39,7 +39,7 @@ export default function Chat() {
         )}
 
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm z-40">
+          <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm">
             <div className="flex items-center gap-2">
               <Loader2 className="h-6 w-6 animate-spin" />
               <p>Loading insurance advisor...</p>
@@ -47,11 +47,10 @@ export default function Chat() {
           </div>
         )}
 
-        {/* Chat iframe wrapper - adjusts padding based on screen size */}
-        <div className="absolute inset-0 md:p-2">
+        <div className="h-[calc(100vh-4rem)] md:p-4">
           <iframe
             src="https://insurance-wizard-rameshnikhil21.replit.app/"
-            className="w-full h-full rounded-none md:rounded-lg border-0 md:border md:border-border transition-all duration-200"
+            className="w-full h-full rounded-none md:rounded-lg border-0 md:border md:border-border"
             onLoad={() => setIsLoading(false)}
             onError={() => {
               setError(true);
