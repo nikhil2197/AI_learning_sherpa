@@ -181,7 +181,7 @@ export default function Chat() {
               onClick={() => setLocation("/feedback")}
               className="w-full h-12 text-lg font-medium transition-transform hover:scale-[0.98] active:scale-[0.97]"
             >
-              End Conversation
+              End Conversation - Share Feedback
             </Button>
           </div>
         </div>
