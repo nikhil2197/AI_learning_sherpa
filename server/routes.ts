@@ -1,5 +1,6 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { insertUserSchema, insertFeedbackSchema } from "@shared/schema";
 import { ZodError } from "zod";
@@ -33,44 +34,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Insurance advisor iframe endpoint
-  app.get("/insurance-advisor", (_req, res) => {
-    res.send(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Insurance Advisor</title>
-          <style>
-            body, html {
-              margin: 0;
-              padding: 0;
-              height: 100%;
-              width: 100%;
-              overflow: hidden;
-            }
-            #chat-container {
-              width: 100%;
-              height: 100vh;
-              border: none;
-            }
-          </style>
-        </head>
-        <body>
-          <div id="chat-container">
-            <!-- Chat interface will be mounted here -->
-          </div>
-          <script>
-            // Initialize chat interface
-            window.addEventListener('load', () => {
-              // TODO: Initialize your chat interface here
-              document.getElementById('chat-container').innerHTML = '<h2>Chat interface loading...</h2>';
-            });
-          </script>
-        </body>
-      </html>
-    `);
+  const httpServer = createServer(app);
+
+  // Setup WebSocket server
+  const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
+
+  wss.on('connection', (ws) => {
+    console.log('Client connected');
+
+    // Send initial message
+    ws.send(JSON.stringify({
+      type: 'bot',
+      message: "Hello! I'm your Auto Insurance Advisor. I'll help you find the right insurance coverage. What type of vehicle do you own?"
+    }));
+
+    ws.on('message', (data) => {
+      const message = data.toString();
+      console.log('Received:', message);
+
+      // Simple response logic - can be enhanced later
+      setTimeout(() => {
+        if (ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({
+            type: 'bot',
+            message: "Thank you for sharing that information. Could you tell me about your typical annual mileage and primary use of the vehicle (personal/commercial)?"
+          }));
+        }
+      }, 1000);
+    });
+
+    ws.on('close', () => {
+      console.log('Client disconnected');
+    });
   });
 
-  const httpServer = createServer(app);
   return httpServer;
 }
