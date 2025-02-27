@@ -136,6 +136,7 @@ export class PgStorage implements IStorage {
   }
 
   async createFeedback(insertFeedback: InsertFeedback): Promise<Feedback> {
+    console.log("PgStorage: Storing feedback data:", insertFeedback);
     const query = `
       INSERT INTO feedbacks (
         user_id, is_confident, learned_new, conversation, 
@@ -157,8 +158,14 @@ export class PgStorage implements IStorage {
       insertFeedback.chatDuration
     ];
 
-    const result = await this.pool.query(query, values);
-    return result.rows[0];
+    try {
+      const result = await this.pool.query(query, values);
+      console.log("PgStorage: Feedback stored successfully:", result.rows[0]);
+      return result.rows[0];
+    } catch (error) {
+      console.error("PgStorage: Error storing feedback:", error);
+      throw error;
+    }
   }
 
   async getUserById(id: number): Promise<User | null> {

@@ -58,10 +58,14 @@ export async function registerRoutes(app: Express, sessionMiddleware: any): Prom
 
   app.post("/api/feedback", async (req, res) => {
     try {
+      console.log("Received feedback data:", req.body);
       const feedbackData = insertFeedbackSchema.parse(req.body);
+      console.log("Validated feedback data:", feedbackData);
       const result = await storage.createFeedback(feedbackData);
+      console.log("Feedback stored successfully:", result);
       res.json(result);
     } catch (err) {
+      console.error("Error storing feedback:", err);
       if (err instanceof ZodError) {
         res.status(400).json({ message: "Invalid feedback data" });
         return;
