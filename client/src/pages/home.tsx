@@ -1,186 +1,90 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { BrainCircuit, ExternalLink, Sparkles, Linkedin } from "lucide-react";
+import { ExternalLink, BrainCircuit, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useLocation } from "wouter";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import { insertFeedbackSchema, type InsertFeedback } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 
-const projects = [
-  {
-    name: "Auto Insurance Advisor",
-    description: "AI-powered insurance recommendation engine",
-    url: "https://replit.com/@nikhilramesh/insurance-advisor",
-  },
-];
-
 export default function Home() {
   const { toast } = useToast();
-  const form = useForm<InsertFeedback>({
-    resolver: zodResolver(insertFeedbackSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      canContact: false,
-    },
-  });
-
-  const mutation = useMutation({
-    mutationFn: async (data: InsertFeedback) => {
-      await apiRequest("POST", "/api/feedback", data);
-    },
-    onSuccess: () => {
-      toast({
-        title: "Thank you!",
-        description: "I'll get back to you soon.",
-      });
-      form.reset();
-    },
-    onError: () => {
-      toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
-        variant: "destructive",
-      });
-    },
-  });
   const [, setLocation] = useLocation();
 
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 md:py-16 space-y-8 md:space-y-12">
         {/* Hero Section */}
-        <section className="text-center space-y-2">
+        <section className="text-center space-y-4">
           <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent leading-tight">
-            Clear Choice AI: Auto Insurance
+            AI-Powered Personal Space
           </h1>
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+            Your intelligent digital companion that learns and adapts to create a unique, 
+            personalized experience.
+          </p>
         </section>
 
-        {/* What AI Does */}
-        <section className="max-w-2xl mx-auto px-4">
+        {/* Features */}
+        <section className="max-w-4xl mx-auto px-4 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <Card className="shadow-sm">
             <CardHeader>
-              <CardTitle className="text-xl md:text-2xl">
-                What do we do?
-              </CardTitle>
+              <BrainCircuit className="h-8 w-8 mb-2 text-primary" />
+              <CardTitle className="text-xl">Adaptive AI</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <p>
-                We're 100% focused on using AI to get the best Motor Insurance
-                for <em>your life</em> — saving you time and confusion. Here's
-                how:
+            <CardContent>
+              <p className="text-muted-foreground">
+                Personalized interactions that learn from our conversations to better 
+                understand and assist you.
               </p>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <div className="bg-primary/10 rounded-full p-2 mt-0.5">
-                    <span className="font-semibold text-primary">1</span>
-                  </div>
-                  <div>
-                    <h3 className="font-medium">Personal Assessment</h3>
-                    <p className="text-muted-foreground">
-                      Asks you questions about your car and driving scenarios
-                    </p>
-                  </div>
-                </div>
+            </CardContent>
+          </Card>
 
-                <div className="flex items-start gap-3">
-                  <div className="bg-primary/10 rounded-full p-2 mt-0.5">
-                    <span className="font-semibold text-primary">2</span>
-                  </div>
-                  <div>
-                    <h3 className="font-medium">Coverage Selection</h3>
-                    <p className="text-muted-foreground">
-                      Using your assessment to guide you through selecting the
-                      best coverage for your needs
-                    </p>
-                  </div>
-                </div>
+          <Card className="shadow-sm">
+            <CardHeader>
+              <Sparkles className="h-8 w-8 mb-2 text-primary" />
+              <CardTitle className="text-xl">Dynamic Content</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground">
+                Content that evolves based on your interests and engagement patterns.
+              </p>
+            </CardContent>
+          </Card>
 
-                <div className="flex items-start gap-3">
-                  <div className="bg-primary/10 rounded-full p-2 mt-0.5">
-                    <span className="font-semibold text-primary">3</span>
-                  </div>
-                  <div>
-                    <h3 className="font-medium">Provider Recommendation</h3>
-                    <p className="text-muted-foreground">
-                      Based on your coverage needs and personal situation,
-                      recommend the insurance provider that is the right balance
-                      of cost and service
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <Button
-                className="w-full mt-4"
-                onClick={() => setLocation("/get-started")}
-              >
-                Get Started
-              </Button>
+          <Card className="shadow-sm md:col-span-2 lg:col-span-1">
+            <CardHeader>
+              <ExternalLink className="h-8 w-8 mb-2 text-primary" />
+              <CardTitle className="text-xl">Smart Connections</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground">
+                Intelligent linking of your interests, activities, and goals.
+              </p>
             </CardContent>
           </Card>
         </section>
 
-        {/* Creator Info */}
-        <section className="max-w-2xl mx-auto px-4">
-          <Card className="shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-xl md:text-2xl">The Creator</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p>
-                Hey my name is Nikhil Ramesh and this is a site I am using to
-                publicly document my learning journey in building AI tools. My
-                day job lies at the intersection of strategy, ops and product at
-                Openhouse - an early stage education startup in Bengaluru. Prior
-                to Openhouse I was a management consultant in the US and have
-                earned my Bachelors Degree at Northwestern.
+        {/* CTA Section */}
+        <section className="max-w-2xl mx-auto px-4 text-center">
+          <Card className="shadow-sm bg-primary/5">
+            <CardContent className="pt-6">
+              <h2 className="text-2xl font-semibold mb-4">
+                Ready to start your personalized experience?
+              </h2>
+              <p className="text-muted-foreground mb-6">
+                Begin your journey with an AI that understands and adapts to you.
               </p>
-              <p>My other hobbies involve Food, Sports and Politics.</p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button variant="outline" asChild>
-                  <a
-                    href="https://www.linkedin.com/in/nikhil2197/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2"
-                  >
-                    <Linkedin className="h-4 w-4" />
-                    Connect with me on LinkedIn
-                  </a>
-                </Button>
-                <Button variant="outline" asChild>
-                  <a
-                    href="https://x.com/nikhil2197"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2"
-                  >
-                    <svg
-                      className="h-4 w-4"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                    </svg>
-                    Follow me on Twitter
-                  </a>
-                </Button>
-              </div>
+              <Button 
+                size="lg" 
+                className="w-full md:w-auto"
+                onClick={() => setLocation("/get-started")}
+              >
+                Get Started
+              </Button>
             </CardContent>
           </Card>
         </section>

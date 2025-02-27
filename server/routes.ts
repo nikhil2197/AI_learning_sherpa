@@ -5,6 +5,10 @@ import { initStorage } from "./storage";
 import { insertUserSchema, insertFeedbackSchema } from "@shared/schema";
 import { ZodError } from "zod";
 import * as http from "http";
+import jwt from "jsonwebtoken";
+
+// JWT secret key
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 // Extended WebSocket interface to store user information
 interface UserWebSocket extends WebSocket {
@@ -22,6 +26,11 @@ export async function registerRoutes(app: Express, sessionMiddleware: any): Prom
 
   // API endpoint to get current user (if logged in)
   app.get("/api/current-user", async (req, res) => {
+    console.log('Session data:', {
+      sessionId: req.session?.id,
+      userId: req.session?.userId,
+      cookie: req.session?.cookie
+    });
     const userId = req.session?.userId;
     if (!userId) {
       console.log("No userId in session");
@@ -37,11 +46,19 @@ export async function registerRoutes(app: Express, sessionMiddleware: any): Prom
         return res.status(401).json({ message: "Invalid session" });
       }
 
-      // Return user without sensitive info
+      // Generate JWT token for iframe authentication
+      const token = jwt.sign(
+        { userId: user.id, email: user.email },
+        JWT_SECRET,
+        { expiresIn: '1h' }
+      );
+
+      // Return user with auth token
       res.json({
         id: user.id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        token
       });
     } catch (err) {
       console.error("Error fetching current user:", err);
@@ -59,10 +76,21 @@ export async function registerRoutes(app: Express, sessionMiddleware: any): Prom
       if (req.session) {
         req.session.userId = user.id;
         req.session.createdAt = new Date();
-        console.log(`Created session for user ${user.id}`);
+        console.log('Created user session:', {
+          sessionId: req.session?.id,
+          userId: user.id,
+          cookie: req.session?.cookie
+        });
       }
 
-      res.json(user);
+      // Generate JWT token
+      const token = jwt.sign(
+        { userId: user.id, email: user.email },
+        JWT_SECRET,
+        { expiresIn: '1h' }
+      );
+
+      res.json({ ...user, token });
     } catch (err) {
       if (err instanceof ZodError) {
         res.status(400).json({ message: "Invalid user data" });
@@ -143,7 +171,7 @@ export async function registerRoutes(app: Express, sessionMiddleware: any): Prom
     if (userWs && userWs.length > 0) {
       // Return the conversation history from the first active connection
       // (typically there's only one per user)
-      return res.json({ 
+      return res.json({
         history: userWs[0].conversationHistory || [],
         sessionId: userWs[0].sessionId
       });
@@ -156,15 +184,15 @@ export async function registerRoutes(app: Express, sessionMiddleware: any): Prom
   const httpServer = createServer(app);
 
   // Setup WebSocket server with session integration
-  const wss = new WebSocketServer({ 
-    server: httpServer, 
+  const wss = new WebSocketServer({
+    server: httpServer,
     path: '/ws',
     // Skip client verification
     verifyClient: false
   });
 
   wss.on('connection', async (ws: UserWebSocket, req) => {
-    console.log('Client connected');
+    console.log('WebSocket connection attempt');
 
     // Initialize conversation history
     ws.conversationHistory = [];
@@ -174,6 +202,10 @@ export async function registerRoutes(app: Express, sessionMiddleware: any): Prom
       sessionMiddleware(req, {} as http.ServerResponse, () => {
         // @ts-ignore - accessing session property
         const session = req.session;
+        console.log('WebSocket session:', {
+          sessionId: session?.id,
+          userId: session?.userId
+        });
         if (session?.userId) {
           // Associate WebSocket with user ID from session
           ws.userId = session.userId;

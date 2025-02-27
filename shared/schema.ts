@@ -39,7 +39,8 @@ export const insertFeedbackSchema = createInsertSchema(feedbacks)
     chatDuration: true,
   });
 
+// Extended User type to include the auth token
 export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
+export type User = typeof users.$inferSelect & { token?: string };
 export type InsertFeedback = z.infer<typeof insertFeedbackSchema>;
 export type Feedback = typeof feedbacks.$inferSelect;
