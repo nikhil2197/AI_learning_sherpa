@@ -1,19 +1,23 @@
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { useState, useRef, useEffect } from "react";
-import { Send, Loader2 } from "lucide-react";
+import { Send, Loader2, AlertCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useToast } from "@/hooks/use-toast";
 
 interface Message {
   type: 'user' | 'bot';
   message: string;
+  timestamp: number;
 }
 
 const INITIAL_MESSAGE = {
   type: 'bot' as const,
-  message: "Hi there! I'm your friendly insurance advisor. I'd like to help you build the right coverage plan and find the best insurance providers for your needs. If you already know exactly what coverage you want, we can jump straight to comparing providers - though I recommend going through the full process to ensure you're getting exactly what you need.\n\nWhere are you in your insurance journey?\n1. Looking to find the right coverage and insurance provider\n2. Already know what coverage you need and just want to compare providers"
+  message: "Hi there! I'm your friendly insurance advisor. I'd like to help you build the right coverage plan and find the best insurance providers for your needs. If you already know exactly what coverage you want, we can jump straight to comparing providers - though I recommend going through the full process to ensure you're getting exactly what you need.\n\nWhere are you in your insurance journey?\n1. Looking to find the right coverage and insurance provider\n2. Already know what coverage you need and just want to compare providers",
+  timestamp: Date.now()
 };
 
 export default function Chat() {
@@ -21,6 +25,7 @@ export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([INITIAL_MESSAGE]);
   const [input, setInput] = useState('');
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
 
   // Store chat start time
   useEffect(() => {
@@ -39,12 +44,27 @@ export default function Chat() {
 
   const chatMutation = useMutation({
     mutationFn: async (message: string) => {
-      const response = await apiRequest("POST", "/api/chat", { message });
+      const response = await apiRequest("POST", "/api/chat", { 
+        message,
+        context: messages.slice(-5) // Send last 5 messages for context
+      });
       return response.json();
     },
     onSuccess: (data) => {
-      setMessages(prev => [...prev, { type: 'bot', message: data.message }]);
+      setMessages(prev => [...prev, { 
+        type: 'bot', 
+        message: data.message,
+        timestamp: Date.now()
+      }]);
       scrollToBottom();
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: "Failed to get response from AI. Please try again.",
+        variant: "destructive",
+      });
+      console.error('Chat error:', error);
     },
   });
 
@@ -53,15 +73,27 @@ export default function Chat() {
     if (!input.trim() || chatMutation.isPending) return;
 
     // Add user message to chat
-    setMessages(prev => [...prev, { type: 'user', message: input }]);
+    const newMessage = {
+      type: 'user' as const,
+      message: input.trim(),
+      timestamp: Date.now()
+    };
+    setMessages(prev => [...prev, newMessage]);
 
     // Clear input and scroll
-    const userMessage = input;
     setInput('');
     scrollToBottom();
 
     // Send to API
-    chatMutation.mutate(userMessage);
+    chatMutation.mutate(newMessage.message);
+  };
+
+  // Format timestamp
+  const formatTime = (timestamp: number) => {
+    return new Intl.DateTimeFormat('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+    }).format(timestamp);
   };
 
   return (
@@ -101,10 +133,28 @@ export default function Chat() {
                     hover:shadow-md
                   `}
                 >
-                  {msg.message}
+                  <div className="flex flex-col gap-1">
+                    <div>{msg.message}</div>
+                    <div className={`text-xs ${msg.type === 'user' ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>
+                      {formatTime(msg.timestamp)}
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
+
+            {/* Typing indicator */}
+            {chatMutation.isPending && (
+              <div className="flex justify-start">
+                <div className="bg-muted rounded-2xl px-4 py-2 shadow-sm">
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 rounded-full bg-primary/60 animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <div className="w-2 h-2 rounded-full bg-primary/60 animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <div className="w-2 h-2 rounded-full bg-primary/60 animate-bounce" style={{ animationDelay: '300ms' }} />
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

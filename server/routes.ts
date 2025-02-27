@@ -157,13 +157,22 @@ export async function registerRoutes(app: Express, sessionMiddleware: any): Prom
   // Add this new endpoint after other API routes
   app.post("/api/chat", async (req, res) => {
     try {
-      const { message } = req.body;
+      const { message, context } = req.body;
       if (!message) {
         return res.status(400).json({ message: "Message is required" });
       }
 
+      // Format conversation history for OpenAI
+      const messages = context ? context.map((msg: { type: string; message: string }) => ({
+        role: msg.type === 'user' ? 'user' : 'assistant',
+        content: msg.message
+      })) : [];
+
+      // Add the current message
+      messages.push({ role: 'user', content: message });
+
       // Get response from OpenAI
-      const botResponse = await getChatResponse([{ role: "user", content: message }]);
+      const botResponse = await getChatResponse(messages);
 
       res.json({
         type: 'bot',
@@ -171,7 +180,9 @@ export async function registerRoutes(app: Express, sessionMiddleware: any): Prom
       });
     } catch (err) {
       console.error('Chat error:', err);
-      res.status(500).json({ message: "Failed to get response" });
+      res.status(500).json({ 
+        message: err instanceof Error ? err.message : "Failed to get response" 
+      });
     }
   });
 
