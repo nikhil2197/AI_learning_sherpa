@@ -1,19 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useQuery } from "@tanstack/react-query";
-import type { User } from "@shared/schema";
 
 export default function Chat() {
   const [, setLocation] = useLocation();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   // Get current user session
-  const { data: user, isLoading: isLoadingUser, isError: isUserError } = useQuery<User>({
+  const { data: user, isLoading: isLoadingUser, isError: isUserError } = useQuery({
     queryKey: ['/api/current-user'],
   });
 
@@ -29,38 +27,10 @@ export default function Chat() {
     }
   }, [user, isLoadingUser, setLocation]);
 
-  // Handle iframe authentication via postMessage
-  useEffect(() => {
-    if (!user) return;
-
-    // Handle messages from iframe
-    const handleMessage = (event: MessageEvent) => {
-      // Verify origin matches our chat app
-      if (event.origin !== 'https://insurance-wizard-rameshnikhil21.replit.app') {
-        return;
-      }
-
-      // If iframe requests authentication
-      if (event.data?.type === 'REQUEST_AUTH') {
-        // Send user data securely via postMessage
-        iframeRef.current?.contentWindow?.postMessage({
-          type: 'AUTH_DATA',
-          data: {
-            userId: user.id,
-            email: user.email,
-            timestamp: Date.now(),
-            token: user.token // Send the JWT token
-          }
-        }, 'https://insurance-wizard-rameshnikhil21.replit.app');
-      }
-    };
-
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
-  }, [user]);
-
-  // Construct iframe URL
+  // Construct iframe URL with user context
   const chatUrl = new URL('https://insurance-wizard-rameshnikhil21.replit.app');
+  if (user?.id) chatUrl.searchParams.append('userId', user.id.toString());
+  if (user?.email) chatUrl.searchParams.append('email', encodeURIComponent(user.email));
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -97,7 +67,6 @@ export default function Chat() {
 
         {user && (
           <iframe
-            ref={iframeRef}
             src={chatUrl.toString()}
             className="w-full h-[calc(100vh-4rem)]"
             onLoad={() => setIsLoading(false)}
@@ -105,7 +74,7 @@ export default function Chat() {
               setError(true);
               setIsLoading(false);
             }}
-            // Only allow required features
+            // Only allow clipboard access
             allow="clipboard-write"
           />
         )}

@@ -15,41 +15,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// Configure CORS for cross-origin requests
-app.use((req, res, next) => {
-  // Allow the external chat app domain
-  const allowedOrigins = ['https://insurance-wizard-rameshnikhil21.replit.app'];
-  const origin = req.headers.origin;
-
-  if (origin && allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-  }
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-  next();
-});
-
 // Configure session middleware
 const SESSION_SECRET = process.env.SESSION_SECRET || "insurance-advisor-secret";
 const ONE_WEEK = 7 * 24 * 60 * 60 * 1000; // 1 week in milliseconds
 
-// Update session middleware configuration
+// Basic session setup - will be enhanced with PostgreSQL store if available
 const sessionMiddleware = session({
   secret: SESSION_SECRET,
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: false, // Don't create session until something stored
   cookie: {
     secure: process.env.NODE_ENV === "production",
     maxAge: ONE_WEEK,
-    httpOnly: true,
-    sameSite: 'none', // Allow cross-origin with Secure
-    path: '/',
-    domain: process.env.NODE_ENV === "production" ? ".replit.app" : undefined
+    httpOnly: true, // Helps prevent XSS attacks
   },
 });
 
@@ -99,20 +77,16 @@ app.use((req, res, next) => {
         tableName: "session",
       });
 
-      // Update PostgreSQL session store configuration
+      // Update session middleware with PostgreSQL store
       app.use(
         session({
           store: sessionStore,
           secret: SESSION_SECRET,
           resave: false,
-          saveUninitialized: false,
+          saveUninitialized: true,
           cookie: {
             secure: process.env.NODE_ENV === "production",
             maxAge: ONE_WEEK,
-            httpOnly: true,
-            sameSite: 'none', // Allow cross-origin with Secure
-            path: '/',
-            domain: process.env.NODE_ENV === "production" ? ".replit.app" : undefined
           },
         }),
       );
@@ -135,10 +109,10 @@ app.use((req, res, next) => {
 
   // Error handling middleware
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    console.error('Server error:', err);
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
     res.status(status).json({ message });
+    throw err;
   });
 
   if (app.get("env") === "development") {
@@ -147,7 +121,7 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  // Use port 5000 for both production and development
+  // Use port 5000 for both production and development to match .replit configuration
   const port = 5000;
 
   server
