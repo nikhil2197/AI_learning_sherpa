@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // Configure session middleware
-const SESSION_SECRET = process.env.SESSION_SECRET || 'insurance-advisor-secret';
+const SESSION_SECRET = process.env.SESSION_SECRET || "insurance-advisor-secret";
 const ONE_WEEK = 7 * 24 * 60 * 60 * 1000; // 1 week in milliseconds
 
 // Basic session setup - will be enhanced with PostgreSQL store if available
@@ -24,11 +24,11 @@ const sessionMiddleware = session({
   secret: SESSION_SECRET,
   resave: false,
   saveUninitialized: false, // Don't create session until something stored
-  cookie: { 
-    secure: process.env.NODE_ENV === 'production',
+  cookie: {
+    secure: process.env.NODE_ENV === "production",
     maxAge: ONE_WEEK,
-    httpOnly: true // Helps prevent XSS attacks
-  }
+    httpOnly: true, // Helps prevent XSS attacks
+  },
 });
 
 // Request logging middleware
@@ -70,24 +70,26 @@ app.use((req, res, next) => {
   if (process.env.DATABASE_URL) {
     try {
       // Dynamic import for ESM compatibility
-      const pgSessionModule = await import('connect-pg-simple');
+      const pgSessionModule = await import("connect-pg-simple");
       pgSession = pgSessionModule.default(session);
       sessionStore = new pgSession({
         conString: process.env.DATABASE_URL,
-        tableName: 'session'
+        tableName: "session",
       });
 
       // Update session middleware with PostgreSQL store
-      app.use(session({
-        store: sessionStore,
-        secret: SESSION_SECRET,
-        resave: false,
-        saveUninitialized: true,
-        cookie: { 
-          secure: process.env.NODE_ENV === 'production',
-          maxAge: ONE_WEEK
-        }
-      }));
+      app.use(
+        session({
+          store: sessionStore,
+          secret: SESSION_SECRET,
+          resave: false,
+          saveUninitialized: true,
+          cookie: {
+            secure: process.env.NODE_ENV === "production",
+            maxAge: ONE_WEEK,
+          },
+        }),
+      );
 
       log("Using PostgreSQL session store");
     } catch (error) {
@@ -120,14 +122,19 @@ app.use((req, res, next) => {
   }
 
   // Use port 80 for production deployment, otherwise use 3000 for development
-  const port = process.env.NODE_ENV === 'production' ? 80 : 3000;
+  const port = process.env.NODE_ENV === "production" ? 5000 : 3000;
 
-  server.listen({
-    port: port,
-    host: "0.0.0.0",
-  }, () => {
-    log(`serving on port ${port}`);
-  }).on('error', (err: any) => {
-    console.error('Server error:', err);
-  });
+  server
+    .listen(
+      {
+        port: port,
+        host: "0.0.0.0",
+      },
+      () => {
+        log(`serving on port ${port}`);
+      },
+    )
+    .on("error", (err: any) => {
+      console.error("Server error:", err);
+    });
 })();
