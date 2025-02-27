@@ -1,11 +1,36 @@
 import express, { type Request, Response, NextFunction } from "express";
+import session from "express-session";
+import cookieParser from "cookie-parser";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { initStorage } from "./storage";
 
+// PostgreSQL session store for persistent sessions
+let pgSession: any;
+let sessionStore: any;
+
+// Initialize the app
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
+// Configure session middleware
+const SESSION_SECRET = process.env.SESSION_SECRET || 'insurance-advisor-secret';
+const ONE_WEEK = 7 * 24 * 60 * 60 * 1000; // 1 week in milliseconds
+
+// Basic session setup - will be enhanced with PostgreSQL store if available
+const sessionMiddleware = session({
+  secret: SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { 
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: ONE_WEEK
+  }
+});
+
+// Request logging middleware
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
@@ -37,7 +62,45 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  const server = await registerRoutes(app);
+  // Initialize storage
+  const storage = await initStorage();
+  
+  // Set up PostgreSQL session store if DATABASE_URL is available
+  if (process.env.DATABASE_URL) {
+    try {
+      pgSession = require('connect-pg-simple')(session);
+      sessionStore = new pgSession({
+        conString: process.env.DATABASE_URL,
+        tableName: 'session'
+      });
+      
+      // Update session middleware with PostgreSQL store
+      app.use(session({
+        store: sessionStore,
+        secret: SESSION_SECRET,
+        resave: false,
+        saveUninitialized: true,
+        cookie: { 
+          secure: process.env.NODE_ENV === 'production',
+          maxAge: ONE_WEEK
+        }
+      }));
+      
+      log("Using PostgreSQL session store");
+    } catch (error) {
+      console.error("Failed to initialize PostgreSQL session store:", error);
+      // Fall back to memory-based sessions
+      app.use(sessionMiddleware);
+      log("Using memory-based session store");
+    }
+  } else {
+    // Use memory-based sessions
+    app.use(sessionMiddleware);
+    log("Using memory-based session store");
+  }
+  
+  // Initialize routes and get the HTTP server
+  const server = await registerRoutes(app, sessionMiddleware);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
