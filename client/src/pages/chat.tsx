@@ -2,12 +2,13 @@ import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { Card } from "@/components/ui/card";
 import { useState } from "react";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function Chat() {
   const [, setLocation] = useLocation();
   const [iframeError, setIframeError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -24,11 +25,20 @@ export default function Chat() {
           ) : null}
 
           <Card className="h-[80vh] relative overflow-hidden">
+            {isLoading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+                <div className="flex items-center gap-2">
+                  <Loader2 className="h-6 w-6 animate-spin" />
+                  <p>Loading chat interface...</p>
+                </div>
+              </div>
+            )}
             <iframe
               src={`${window.location.protocol}//${window.location.host}/insurance-advisor`}
               className="w-full h-full border-0"
               title="Insurance Advisor"
               onError={() => setIframeError(true)}
+              onLoad={() => setIsLoading(false)}
             />
           </Card>
         </div>

@@ -33,6 +33,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Insurance advisor iframe endpoint
+  app.get("/insurance-advisor", (_req, res) => {
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Insurance Advisor</title>
+          <style>
+            body, html {
+              margin: 0;
+              padding: 0;
+              height: 100%;
+              width: 100%;
+              overflow: hidden;
+            }
+            #chat-container {
+              width: 100%;
+              height: 100vh;
+              border: none;
+            }
+          </style>
+        </head>
+        <body>
+          <div id="chat-container">
+            <!-- Chat interface will be mounted here -->
+          </div>
+          <script>
+            // Initialize chat interface
+            window.addEventListener('load', () => {
+              // TODO: Initialize your chat interface here
+              document.getElementById('chat-container').innerHTML = '<h2>Chat interface loading...</h2>';
+            });
+          </script>
+        </body>
+      </html>
+    `);
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
