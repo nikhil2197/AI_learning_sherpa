@@ -1,7 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { BrainCircuit, ExternalLink, Sparkles, Linkedin, AlertCircle } from "lucide-react";
+import {
+  BrainCircuit,
+  ExternalLink,
+  Sparkles,
+  Linkedin,
+  AlertCircle,
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 import { Button } from "@/components/ui/button";
@@ -30,7 +36,7 @@ export default function Home() {
         {/* Hero Section */}
         <section className="text-center space-y-2">
           <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent leading-tight">
-            AI Learning Coach: Your Personalized Guide
+            Clear Choice AI: AI Courses
           </h1>
         </section>
 
@@ -44,7 +50,9 @@ export default function Home() {
             </CardHeader>
             <CardContent className="space-y-6">
               <p>
-                We're focused on helping you learn AI in a way that fits <em>your life</em> — considering your schedule, goals, and learning style. Here's how:
+                We're focused on helping you learn AI in a way that fits{" "}
+                <em>your life</em> — considering your schedule, goals, and
+                learning style. Here's how:
               </p>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
@@ -54,7 +62,8 @@ export default function Home() {
                   <div>
                     <h3 className="font-medium">Personal Assessment</h3>
                     <p className="text-muted-foreground">
-                      Understanding your background, goals, and daily commitments
+                      Understanding your background, goals, and daily
+                      commitments
                     </p>
                   </div>
                 </div>
@@ -66,7 +75,8 @@ export default function Home() {
                   <div>
                     <h3 className="font-medium">Learning Plan Creation</h3>
                     <p className="text-muted-foreground">
-                      Crafting a customized study plan that fits your schedule and learning style
+                      Crafting a customized study plan that fits your schedule
+                      and learning style
                     </p>
                   </div>
                 </div>
@@ -78,7 +88,8 @@ export default function Home() {
                   <div>
                     <h3 className="font-medium">Resource Matching</h3>
                     <p className="text-muted-foreground">
-                      Recommending the right learning resources based on your goals and budget constraints
+                      Recommending the right learning resources based on your
+                      goals and budget constraints
                     </p>
                   </div>
                 </div>
@@ -90,7 +101,11 @@ export default function Home() {
                   <div className="flex items-start gap-2 text-sm">
                     <BrainCircuit className="h-4 w-4 mt-0.5 flex-shrink-0 text-primary" />
                     <p>
-                      <span className="font-medium">Please note:</span> Our AI coach will spend about 5-10 minutes understanding your background and goals to create a personalized learning plan. Be prepared to share your schedule and learning preferences!
+                      <span className="font-medium">Please note:</span> Our AI
+                      coach will spend about 5-10 minutes understanding your
+                      background and goals to create a personalized learning
+                      plan. Be prepared to share your schedule and learning
+                      preferences!
                     </p>
                   </div>
                 </CardContent>
@@ -102,9 +117,10 @@ export default function Home() {
                   <div className="flex items-start gap-2 text-sm text-muted-foreground">
                     <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
                     <p>
-                      Our AI coach provides personalized recommendations based on your input.
-                      While thoroughly tested, please use your judgment when making final decisions
-                      about your learning journey.
+                      Our AI coach provides personalized recommendations based
+                      on your input. While thoroughly tested, please use your
+                      judgment when making final decisions about your learning
+                      journey.
                     </p>
                   </div>
                 </CardContent>
