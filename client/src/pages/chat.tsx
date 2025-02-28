@@ -16,7 +16,7 @@ interface Message {
 
 const INITIAL_MESSAGE = {
   type: 'bot' as const,
-  message: "Hi there! I'm your friendly insurance advisor. I'd like to help you build the right coverage plan and find the best insurance providers for your needs. If you already know exactly what coverage you want, we can jump straight to comparing providers - though I recommend going through the full process to ensure you're getting exactly what you need.\n\nWhere are you in your insurance journey?\n1. Looking to find the right coverage and insurance provider\n2. Already know what coverage you need and just want to compare providers",
+  message: "Hi there! I'm your AI Learning Coach, here to help you create a personalized plan for learning AI. I'll guide you through understanding your goals, schedule, and preferences to build the right learning path for you.\n\nTo get started, could you tell me what sparked your interest in learning AI?",
   timestamp: Date.now()
 };
 

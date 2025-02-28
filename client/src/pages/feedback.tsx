@@ -92,7 +92,7 @@ export default function Feedback() {
         <div className="max-w-2xl mx-auto space-y-8">
           <Card>
             <CardHeader>
-              <CardTitle className="text-xl md:text-2xl">Your Feedback</CardTitle>
+              <CardTitle className="text-xl md:text-2xl">Your Feedback on AI Learning Plan</CardTitle>
             </CardHeader>
             <CardContent>
               <Form {...form}>
@@ -155,7 +155,7 @@ export default function Feedback() {
                         </FormControl>
                         <div className="space-y-1 leading-none">
                           <FormLabel>
-                            Do you feel confident about the insurance advice provided?
+                            Do you feel confident about implementing the suggested learning plan?
                           </FormLabel>
                         </div>
                       </FormItem>
@@ -175,7 +175,7 @@ export default function Feedback() {
                         </FormControl>
                         <div className="space-y-1 leading-none">
                           <FormLabel>
-                            Did you learn something new about insurance through this conversation?
+                            Did you gain clarity about your AI learning journey through this conversation?
                           </FormLabel>
                         </div>
                       </FormItem>
@@ -187,7 +187,7 @@ export default function Feedback() {
                     name="conversation"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>How can we improve this service?</FormLabel>
+                        <FormLabel>How can we improve this learning guidance service?</FormLabel>
                         <FormControl>
                           <Textarea
                             placeholder="Share your suggestions for improvement..."

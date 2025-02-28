@@ -20,44 +20,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { insertFeedbackSchema, type InsertFeedback } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 
-const projects = [
-  {
-    name: "Auto Insurance Advisor",
-    description: "AI-powered insurance recommendation engine",
-    url: "https://replit.com/@nikhilramesh/insurance-advisor",
-  },
-];
-
 export default function Home() {
   const { toast } = useToast();
-  const form = useForm<InsertFeedback>({
-    resolver: zodResolver(insertFeedbackSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      canContact: false,
-    },
-  });
-
-  const mutation = useMutation({
-    mutationFn: async (data: InsertFeedback) => {
-      await apiRequest("POST", "/api/feedback", data);
-    },
-    onSuccess: () => {
-      toast({
-        title: "Thank you!",
-        description: "I'll get back to you soon.",
-      });
-      form.reset();
-    },
-    onError: () => {
-      toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
-        variant: "destructive",
-      });
-    },
-  });
   const [, setLocation] = useLocation();
 
   return (
@@ -66,7 +30,7 @@ export default function Home() {
         {/* Hero Section */}
         <section className="text-center space-y-2">
           <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent leading-tight">
-            Clear Choice AI: Auto Insurance
+            AI Learning Coach: Your Personalized Guide
           </h1>
         </section>
 
@@ -80,9 +44,7 @@ export default function Home() {
             </CardHeader>
             <CardContent className="space-y-6">
               <p>
-                We're 100% focused on using AI to get the best Motor Insurance
-                for <em>your life</em> — saving you time and confusion. Here's
-                how:
+                We're focused on helping you learn AI in a way that fits <em>your life</em> — considering your schedule, goals, and learning style. Here's how:
               </p>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
@@ -92,7 +54,7 @@ export default function Home() {
                   <div>
                     <h3 className="font-medium">Personal Assessment</h3>
                     <p className="text-muted-foreground">
-                      Asks you questions about your car and driving scenarios
+                      Understanding your background, goals, and daily commitments
                     </p>
                   </div>
                 </div>
@@ -102,10 +64,9 @@ export default function Home() {
                     <span className="font-semibold text-primary">2</span>
                   </div>
                   <div>
-                    <h3 className="font-medium">Coverage Selection</h3>
+                    <h3 className="font-medium">Learning Plan Creation</h3>
                     <p className="text-muted-foreground">
-                      Using your assessment to guide you through selecting the
-                      best coverage for your needs
+                      Crafting a customized study plan that fits your schedule and learning style
                     </p>
                   </div>
                 </div>
@@ -115,39 +76,35 @@ export default function Home() {
                     <span className="font-semibold text-primary">3</span>
                   </div>
                   <div>
-                    <h3 className="font-medium">Provider Recommendation</h3>
+                    <h3 className="font-medium">Resource Matching</h3>
                     <p className="text-muted-foreground">
-                      Based on your coverage needs and personal situation,
-                      recommend the insurance provider that is the right balance
-                      of cost and service
+                      Recommending the right learning resources based on your goals and budget constraints
                     </p>
                   </div>
                 </div>
               </div>
 
-              {/* Info about time estimate - Moved from get-started */}
+              {/* Info about time estimate */}
               <Card className="shadow-sm bg-primary/10 mt-6">
                 <CardContent className="p-4">
                   <div className="flex items-start gap-2 text-sm">
-                    <svg className="h-4 w-4 mt-0.5 flex-shrink-0 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="10" />
-                      <polyline points="12 6 12 12 16 14" />
-                    </svg>
+                    <BrainCircuit className="h-4 w-4 mt-0.5 flex-shrink-0 text-primary" />
                     <p>
-                      <span className="font-medium">Please note:</span> This process takes about 5 minutes to collect all information as we guide you to the best possible insurance options. If you already know exactly what you want, feel free to tell our AI advisor directly and we'll skip ahead!
+                      <span className="font-medium">Please note:</span> Our AI coach will spend about 5-10 minutes understanding your background and goals to create a personalized learning plan. Be prepared to share your schedule and learning preferences!
                     </p>
                   </div>
                 </CardContent>
               </Card>
 
-              {/* Disclaimer - Moved from get-started */}
+              {/* Disclaimer */}
               <Card className="shadow-sm bg-muted">
                 <CardContent className="p-4">
                   <div className="flex items-start gap-2 text-sm text-muted-foreground">
                     <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
                     <p>
-                      These recommendations are being actively refined for accuracy and reliability.
-                      While thoroughly tested, please use your judgment when making final decisions.
+                      Our AI coach provides personalized recommendations based on your input.
+                      While thoroughly tested, please use your judgment when making final decisions
+                      about your learning journey.
                     </p>
                   </div>
                 </CardContent>
@@ -157,7 +114,7 @@ export default function Home() {
                 className="w-full mt-4"
                 onClick={() => setLocation("/chat")}
               >
-                Talk to AI Advisor
+                Talk to AI Learning Coach
               </Button>
             </CardContent>
           </Card>

@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { ZodError } from "zod";
 import { initStorage } from "./storage";
 import { insertUserSchema, insertFeedbackSchema } from "@shared/schema";
-import { getChatResponse } from "./openai";
+import { getLearningPlanResponse } from "./openai";
 
 export async function registerRoutes(app: Express, sessionMiddleware: any): Promise<Server> {
   // Get storage instance
@@ -27,7 +27,7 @@ export async function registerRoutes(app: Express, sessionMiddleware: any): Prom
       messages.push({ role: 'user', content: message });
 
       // Get response from OpenAI
-      const botResponse = await getChatResponse(messages);
+      const botResponse = await getLearningPlanResponse(messages);
 
       res.json({
         type: 'bot',
