@@ -208,7 +208,7 @@ export async function getLearningPlanResponse(
     const response = await getOpenAIClient().chat.completions.create({
       // Choose your model:
       // e.g., "gpt-4", "gpt-3.5-turbo", or "gpt-4o" if available
-      model: "gpt-4o",
+      model: "gpt-4",
       messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
       temperature: 0.7,
       max_tokens: 1500, // Adjust as needed
