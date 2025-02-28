@@ -201,18 +201,68 @@ Your main goal:
 
 `;
 
+// Track conversation topics to avoid repetitive questions
+const conversationMemory = new Set<string>();
+
+/**
+ * Analyzes messages to detect questions and adds them to memory
+ */
+function updateConversationMemory(messages: Array<{ role: string; content: string }>) {
+  // Look through assistant messages for question patterns
+  messages.forEach(msg => {
+    if (msg.role === 'assistant') {
+      // Find question patterns (ending with ? or starting with common question words)
+      const questionRegex = /(\b(what|how|why|when|where|who|can you|could you|would you|do you|are you|is there|have you)[^?]+\?)/gi;
+      const questions = msg.content.match(questionRegex) || [];
+      
+      questions.forEach(question => {
+        // Normalize the question to avoid minor variations
+        const normalizedQuestion = question.toLowerCase().trim();
+        conversationMemory.add(normalizedQuestion);
+      });
+    }
+  });
+}
+
+/**
+ * Modifies the system prompt to include memory of previous questions
+ */
+function getEnhancedSystemPrompt(): string {
+  // If we have conversation memory, add it to the system prompt
+  if (conversationMemory.size > 0) {
+    const questionsAsked = Array.from(conversationMemory).join('\n- ');
+    return `${SYSTEM_PROMPT}\n\nIMPORTANT: You have already asked the following questions, do not ask them again:\n- ${questionsAsked}\n\nInstead, build on what you've learned from the user's responses.`;
+  }
+  
+  return SYSTEM_PROMPT;
+}
+
 export async function getLearningPlanResponse(
   messages: Array<{ role: "system" | "user" | "assistant"; content: string }>,
 ): Promise<string> {
   return makeOpenAIRequest(async () => {
+    // Update conversation memory based on existing messages
+    updateConversationMemory(messages);
+    
+    // Use enhanced system prompt with memory of questions
+    const enhancedSystemPrompt = getEnhancedSystemPrompt();
+    
     const response = await getOpenAIClient().chat.completions.create({
       // Choose your model:
       // e.g., "gpt-4", "gpt-3.5-turbo", or "gpt-4o" if available
       model: "gpt-4",
-      messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
+      messages: [{ role: "system", content: enhancedSystemPrompt }, ...messages],
       temperature: 0.7,
       max_tokens: 1500, // Adjust as needed
     });
+
+    // Update memory with the new response
+    if (response.choices[0].message.content) {
+      updateConversationMemory([{ 
+        role: "assistant", 
+        content: response.choices[0].message.content 
+      }]);
+    }
 
     return (
       response.choices[0].message.content ||
