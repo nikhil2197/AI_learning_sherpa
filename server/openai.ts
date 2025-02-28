@@ -226,6 +226,15 @@ CONVERSATION FLOW TO MAP DAILY SCHEDULE & BUDGET
      * Specific ML/NLP/Deep Learning courses with exact names and pricing (e.g., "TensorFlow Developer Certificate course on Coursera, approximately ₹43,000 for certification")
      * Specific programming courses on platforms like DataCamp, Codecademy with pricing
      * Named model training resources with cost structures
+   
+   - For creative professionals and content creators (audio, video, static):
+     * Specific AI for audio production courses (e.g., "AI Music Generation with AIVA on Skillshare, ₹1,100/month")
+     * Video editing AI tools with pricing (e.g., "RunwayML for Video Editing course on Domestika, ₹2,500 one-time")
+     * AI for graphic design and static content (e.g., "Midjourney Masterclass on Udemy by [instructor], ₹3,499")
+     * Podcast/audio enhancement AI tools (e.g., "Descript Pro for AI Audio Editing, ₹2,000/month")
+     * Content strategy with AI (e.g., "AI Content Strategy for Creators on LinkedIn Learning, ₹1,400/month")
+     * Social media content optimization using AI (with specific tools and pricing)
+     * YouTube/TikTok/Instagram-specific AI content courses with pricing
      
    - Free: Name specific YouTube channels, specific Udemy free courses, exact Coursera audit options, named newsletters
    - Paid: Name specific Coursera specializations, costs in INR, specific webinars with dates if known
