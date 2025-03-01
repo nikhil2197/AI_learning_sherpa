@@ -31,6 +31,8 @@ const sessionMiddleware = session({
   },
 });
 
+import { log } from "./logger";
+
 // Request logging middleware
 app.use((req, res, next) => {
   const start = Date.now();
