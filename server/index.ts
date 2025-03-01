@@ -149,10 +149,10 @@ app.use((req, res, next) => {
   };
 
   try {
-    await startServer(3000);
+    await startServer(5000);
   } catch (err: any) {
     if (err.code === "EADDRINUSE") {
-      console.error("Port 3000 is in use. Please ensure no other instance is running.");
+      console.error("Port 5000 is in use. Please ensure no other instance is running.");
       process.exit(1);
     } else {
       console.error("Failed to start server:", err);
