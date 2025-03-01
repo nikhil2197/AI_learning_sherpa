@@ -16,7 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { insertUserSchema, type InsertUser } from "@shared/schema";
-import * as z from 'zod';
+import * as z from "zod";
 import { apiRequest } from "@/lib/queryClient";
 
 // Combine user info with feedback fields
@@ -31,16 +31,22 @@ export default function Feedback() {
   const { toast } = useToast();
 
   // Calculate chat duration
-  const chatStartTime = parseInt(sessionStorage.getItem('chatStartTime') || '0');
-  const chatDuration = chatStartTime ? Math.floor((Date.now() - chatStartTime) / 1000) : 0;
+  const chatStartTime = parseInt(
+    sessionStorage.getItem("chatStartTime") || "0",
+  );
+  const chatDuration = chatStartTime
+    ? Math.floor((Date.now() - chatStartTime) / 1000)
+    : 0;
 
   const form = useForm<FeedbackForm>({
-    resolver: zodResolver(insertUserSchema.extend({
-      isConfident: z.boolean().default(false),
-      learnedNew: z.boolean().nullable().default(null), //Allow null for backward compatibility
-      wasFaster: z.boolean().default(false), //New field
-      conversation: z.string().optional(),
-    })),
+    resolver: zodResolver(
+      insertUserSchema.extend({
+        isConfident: z.boolean().default(false),
+        learnedNew: z.boolean().nullable().default(null), //Allow null for backward compatibility
+        wasFaster: z.boolean().default(false), //New field
+        conversation: z.string().optional(),
+      }),
+    ),
     defaultValues: {
       name: "",
       email: "",
@@ -79,7 +85,7 @@ export default function Feedback() {
       });
       form.reset();
       // Clear session storage
-      sessionStorage.removeItem('chatStartTime');
+      sessionStorage.removeItem("chatStartTime");
     },
     onError: () => {
       toast({
@@ -96,7 +102,9 @@ export default function Feedback() {
         <div className="max-w-2xl mx-auto space-y-8">
           <Card>
             <CardHeader>
-              <CardTitle className="text-xl md:text-2xl">Your Feedback on AI Learning Plan</CardTitle>
+              <CardTitle className="text-xl md:text-2xl">
+                Your Feedback on AI Learning Plan
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <Form {...form}>
@@ -159,7 +167,8 @@ export default function Feedback() {
                         </FormControl>
                         <div className="space-y-1 leading-none">
                           <FormLabel>
-                            Do you feel confident about implementing the suggested learning plan?
+                            Do you feel confident about implementing the
+                            suggested learning plan?
                           </FormLabel>
                         </div>
                       </FormItem>
@@ -179,7 +188,8 @@ export default function Feedback() {
                         </FormControl>
                         <div className="space-y-1 leading-none">
                           <FormLabel>
-                            Did you gain clarity about your AI learning journey through this conversation?
+                            Did you gain clarity about your AI learning journey
+                            through this conversation?
                           </FormLabel>
                         </div>
                       </FormItem>
@@ -199,20 +209,22 @@ export default function Feedback() {
                         </FormControl>
                         <div className="space-y-1 leading-none">
                           <FormLabel>
-                            Was this conversation faster than expected?
+                            Was this conversation a faster and/or easier way to
+                            find the desired courses?
                           </FormLabel>
                         </div>
                       </FormItem>
                     )}
                   />
 
-
                   <FormField
                     control={form.control}
                     name="conversation"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>How can we improve this learning guidance service?</FormLabel>
+                        <FormLabel>
+                          How can we improve this learning guidance service?
+                        </FormLabel>
                         <FormControl>
                           <Textarea
                             placeholder="Share your suggestions for improvement..."

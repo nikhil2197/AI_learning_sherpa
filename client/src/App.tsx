@@ -7,6 +7,7 @@ import Home from "@/pages/home";
 import GetStarted from "@/pages/get-started";
 import Chat from "@/pages/chat";
 import Feedback from "@/pages/feedback";
+import AdminDashboard from "@/pages/admin";
 
 function Router() {
   return (
@@ -15,6 +16,7 @@ function Router() {
       <Route path="/get-started" component={GetStarted} />
       <Route path="/chat" component={Chat} />
       <Route path="/feedback" component={Feedback} />
+      <Route path="/admin" component={AdminDashboard} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -7,6 +7,13 @@ export interface IStorage {
   createUser(user: InsertUser): Promise<User>;
   createFeedback(feedback: InsertFeedback): Promise<Feedback>;
   getUserById(id: number): Promise<User | null>;
+  getAllFeedback(): Promise<Array<Feedback & { user: User }>>;
+  getFeedbackStats(): Promise<{
+    total: number;
+    confidentPercentage: number;
+    learnedNewPercentage: number;
+    averageDuration: number;
+  }>;
   setupTables(): Promise<void>;
 }
 
@@ -53,6 +60,47 @@ export class MemStorage implements IStorage {
   async setupTables(): Promise<void> {
     // No tables to set up for in-memory storage
     return;
+  }
+  async getAllFeedback(): Promise<Array<Feedback & { user: User }>> {
+    const feedbackWithUsers = [];
+    for (const feedback of this.feedbacks.values()) {
+      const user = await this.getUserById(feedback.userId);
+      if (user) {
+        feedbackWithUsers.push({ ...feedback, user });
+      }
+    }
+    return feedbackWithUsers.sort((a, b) => 
+      b.createdAt.getTime() - a.createdAt.getTime()
+    );
+  }
+
+  async getFeedbackStats(): Promise<{
+    total: number;
+    confidentPercentage: number;
+    learnedNewPercentage: number;
+    averageDuration: number;
+  }> {
+    const feedbacks = Array.from(this.feedbacks.values());
+    const total = feedbacks.length;
+    if (total === 0) {
+      return {
+        total: 0,
+        confidentPercentage: 0,
+        learnedNewPercentage: 0,
+        averageDuration: 0
+      };
+    }
+
+    const confident = feedbacks.filter(f => f.isConfident).length;
+    const learnedNew = feedbacks.filter(f => f.learnedNew).length;
+    const totalDuration = feedbacks.reduce((sum, f) => sum + (f.chatDuration || 0), 0);
+
+    return {
+      total,
+      confidentPercentage: (confident / total) * 100,
+      learnedNewPercentage: (learnedNew / total) * 100,
+      averageDuration: totalDuration / total
+    };
   }
 }
 
@@ -139,12 +187,12 @@ export class PgStorage implements IStorage {
     console.log("PgStorage: Storing feedback data:", insertFeedback);
     const query = `
       INSERT INTO feedbacks (
-        user_id, is_confident, learned_new, was_faster, conversation, 
+        user_id, is_confident, learned_new, conversation, 
         last_recommendation, chat_duration
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      VALUES ($1, $2, $3, $4, $5, $6)
       RETURNING id, user_id as "userId", is_confident as "isConfident", 
-                learned_new as "learnedNew", was_faster as "wasFaster", conversation, 
+                learned_new as "learnedNew", conversation, 
                 last_recommendation as "lastRecommendation", 
                 chat_duration as "chatDuration", 
                 created_at as "createdAt"
@@ -153,7 +201,6 @@ export class PgStorage implements IStorage {
       insertFeedback.userId, 
       insertFeedback.isConfident, 
       insertFeedback.learnedNew,
-      insertFeedback.wasFaster,
       insertFeedback.conversation,
       insertFeedback.lastRecommendation,
       insertFeedback.chatDuration
@@ -178,6 +225,62 @@ export class PgStorage implements IStorage {
     
     const result = await this.pool.query(query, [id]);
     return result.rows.length > 0 ? result.rows[0] : null;
+  }
+  async getAllFeedback(): Promise<Array<Feedback & { user: User }>> {
+    const query = `
+      SELECT 
+        f.*,
+        u.name,
+        u.email,
+        u.created_at as user_created_at
+      FROM feedbacks f
+      JOIN users u ON f.user_id = u.id
+      ORDER BY f.created_at DESC
+    `;
+
+    const result = await this.pool.query(query);
+    return result.rows.map(row => ({
+      id: row.id,
+      userId: row.user_id,
+      isConfident: row.is_confident,
+      learnedNew: row.learned_new,
+      conversation: row.conversation,
+      lastRecommendation: row.last_recommendation,
+      chatDuration: row.chat_duration,
+      createdAt: row.created_at,
+      user: {
+        id: row.user_id,
+        name: row.name,
+        email: row.email,
+        createdAt: row.user_created_at
+      }
+    }));
+  }
+
+  async getFeedbackStats(): Promise<{
+    total: number;
+    confidentPercentage: number;
+    learnedNewPercentage: number;
+    averageDuration: number;
+  }> {
+    const query = `
+      SELECT 
+        COUNT(*) as total,
+        ROUND(AVG(CASE WHEN is_confident THEN 100 ELSE 0 END), 2) as confident_percentage,
+        ROUND(AVG(CASE WHEN learned_new THEN 100 ELSE 0 END), 2) as learned_new_percentage,
+        ROUND(AVG(COALESCE(chat_duration, 0)), 2) as avg_duration
+      FROM feedbacks
+    `;
+
+    const result = await this.pool.query(query);
+    const stats = result.rows[0];
+
+    return {
+      total: parseInt(stats.total),
+      confidentPercentage: parseFloat(stats.confident_percentage),
+      learnedNewPercentage: parseFloat(stats.learned_new_percentage),
+      averageDuration: parseFloat(stats.avg_duration)
+    };
   }
 }
 

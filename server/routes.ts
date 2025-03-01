@@ -9,6 +9,20 @@ export async function registerRoutes(app: Express, sessionMiddleware: any): Prom
   // Get storage instance
   const storage = await initStorage();
 
+  // Add admin endpoint to fetch feedback data
+  app.get("/api/admin/feedback", async (req, res) => {
+    try {
+      const result = await storage.getAllFeedback();
+      const stats = await storage.getFeedbackStats();
+      res.json({ feedbacks: result, stats });
+    } catch (err) {
+      console.error('Error fetching feedback:', err);
+      res.status(500).json({ 
+        message: err instanceof Error ? err.message : "Failed to fetch feedback" 
+      });
+    }
+  });
+
   // Add chat endpoint - no authentication required
   app.post("/api/chat", async (req, res) => {
     try {
