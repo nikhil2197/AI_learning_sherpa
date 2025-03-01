@@ -48,7 +48,16 @@ export default function AdminDashboard() {
         <h1 className="text-3xl font-bold">Feedback Dashboard</h1>
 
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <Card>
+            <CardHeader className="p-4">
+              <CardTitle className="text-lg">Total Chats</CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0 px-4 pb-4">
+              <p className="text-3xl font-bold">{stats.totalChats}</p>
+            </CardContent>
+          </Card>
+
           <Card>
             <CardHeader className="p-4">
               <CardTitle className="text-lg">Total Feedback</CardTitle>

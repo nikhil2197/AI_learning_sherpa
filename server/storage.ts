@@ -13,6 +13,7 @@ export interface IStorage {
     confidentPercentage: number;
     learnedNewPercentage: number;
     averageDuration: number;
+    totalChats: number;  // Added new stat
   }>;
   setupTables(): Promise<void>;
 }
@@ -79,6 +80,7 @@ export class MemStorage implements IStorage {
     confidentPercentage: number;
     learnedNewPercentage: number;
     averageDuration: number;
+    totalChats: number;
   }> {
     const feedbacks = Array.from(this.feedbacks.values());
     const total = feedbacks.length;
@@ -87,7 +89,8 @@ export class MemStorage implements IStorage {
         total: 0,
         confidentPercentage: 0,
         learnedNewPercentage: 0,
-        averageDuration: 0
+        averageDuration: 0,
+        totalChats: 0
       };
     }
 
@@ -99,7 +102,8 @@ export class MemStorage implements IStorage {
       total,
       confidentPercentage: (confident / total) * 100,
       learnedNewPercentage: (learnedNew / total) * 100,
-      averageDuration: totalDuration / total
+      averageDuration: totalDuration / total,
+      totalChats: total // In this case, total chats equals total feedback
     };
   }
 }
@@ -262,13 +266,15 @@ export class PgStorage implements IStorage {
     confidentPercentage: number;
     learnedNewPercentage: number;
     averageDuration: number;
+    totalChats: number;
   }> {
     const query = `
       SELECT 
         COUNT(*) as total,
         ROUND(AVG(CASE WHEN is_confident THEN 100 ELSE 0 END), 2) as confident_percentage,
         ROUND(AVG(CASE WHEN learned_new THEN 100 ELSE 0 END), 2) as learned_new_percentage,
-        ROUND(AVG(COALESCE(chat_duration, 0)), 2) as avg_duration
+        ROUND(AVG(COALESCE(chat_duration, 0)), 2) as avg_duration,
+        COUNT(*) as total_chats
       FROM feedbacks
     `;
 
@@ -279,7 +285,8 @@ export class PgStorage implements IStorage {
       total: parseInt(stats.total),
       confidentPercentage: parseFloat(stats.confident_percentage),
       learnedNewPercentage: parseFloat(stats.learned_new_percentage),
-      averageDuration: parseFloat(stats.avg_duration)
+      averageDuration: parseFloat(stats.avg_duration),
+      totalChats: parseInt(stats.total_chats)
     };
   }
 }
