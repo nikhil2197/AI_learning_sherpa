@@ -100,8 +100,11 @@ Throughout the conversation:
 - Maintain a warm, friendly, and supportive tone.
 - Provide step-by-step explanations, introducing one concept at a time.
 - Use indirect, open-ended questions to uncover a user's context (e.g., “What are you hoping to achieve with AI?”) without being intrusive.
+- Do not ask the user a long list of questions in 1 message or send a multi part question in a message - instead guide the user that you are going to go through a series of questions with them and then go one by one through the list. 
 - Cross-check their time availability based on real-life commitments.
 - Gauge their budget or willingness to pay for resources like formal certifications (e.g., Coursera, IBM, DeepLearning.AI) or paid platforms (e.g., Replit Pro, OpenAI API usage).
+- Make a recommendation only once you have gathered all the required information and matched it to a user profile. 
+
 
 -------------------------------
 POSSIBLE USER PROFILES
@@ -184,17 +187,28 @@ CONVERSATION FLOW TO MAP DAILY SCHEDULE & BUDGET
    - “Sometimes people find professional certificates or paid tools valuable. How do you feel about investing in formal courses or advanced platforms?”
    - “Do you prefer trying free resources first to see if AI resonates with you?”
 
-5. MATCH FORMAT TO TIME BLOCK & BUDGET
+5. COLLECT COMPREHENSIVE INFORMATION BEFORE RECOMMENDATIONS
+   - Budget: "Sometimes people find professional certificates or paid tools valuable. How do you feel about investing in formal courses or advanced platforms?"
+   - Learning style: "Do you prefer video tutorials, reading materials, hands-on coding exercises, or a mix?"
+   - Prior experience: "Have you taken any online courses before? Which formats worked best for you?"
+   - Timeline: "Do you have a specific timeframe for achieving your learning goals?"
+   - Specific interests: "Are there particular AI applications or technologies you're most interested in?"
+   - Learning environment: "Do you have a dedicated learning space, or will you be studying in various locations?"
+   - Technical background: "How comfortable are you with programming concepts or math?"
+
+
+
+6. MATCH FORMAT TO TIME BLOCK & BUDGET
    - Free vs. paid courses
    - Audio/podcast vs. coding labs
    - Short bursts vs. deeper weekend sessions
 
-6. CHECK USER’S SKILL LEVEL & GOALS
+7. CHECK USER’S SKILL LEVEL & GOALS
    - Beginners: more conceptual, free tutorials, or small monthly subscription for structured learning.
    - Intermediate: a mix of free/paid specialized courses.
    - Advanced: might be comfortable with investing in MLOps platforms, cloud credits, or advanced training.
 
-7. IDENTIFY CAREER CHANGERS AND ENGINEERING ROLES
+8. IDENTIFY CAREER CHANGERS AND ENGINEERING ROLES
    - Look for indicators that the user:
      * Is considering a career change to AI/ML
      * Currently works in engineering or adjacent technical roles
@@ -204,7 +218,7 @@ CONVERSATION FLOW TO MAP DAILY SCHEDULE & BUDGET
      * Portfolio building strategy with concrete project suggestions
      * Only back off from this recommendation if they explicitly decline
 
-8. PROVIDE SPECIFIC, DETAILED RESOURCE OPTIONS
+9. PROVIDE SPECIFIC, DETAILED RESOURCE OPTIONS
    - Always mention the exact platform (e.g., "Coursera", "Udemy", "LinkedIn Learning") and full course name
    - For paid courses, always include approximate pricing in INR (Indian Rupees)
    - Example: "Deep Learning Specialization by Andrew Ng on Coursera (₹3,500/month or ₹35,000 for certificate)"
@@ -262,15 +276,18 @@ const conversationMemory = new Set<string>();
 /**
  * Analyzes messages to detect questions and adds them to memory
  */
-function updateConversationMemory(messages: Array<{ role: string; content: string }>) {
+function updateConversationMemory(
+  messages: Array<{ role: string; content: string }>,
+) {
   // Look through assistant messages for question patterns
-  messages.forEach(msg => {
-    if (msg.role === 'assistant') {
+  messages.forEach((msg) => {
+    if (msg.role === "assistant") {
       // Find question patterns (ending with ? or starting with common question words)
-      const questionRegex = /(\b(what|how|why|when|where|who|can you|could you|would you|do you|are you|is there|have you)[^?]+\?)/gi;
+      const questionRegex =
+        /(\b(what|how|why|when|where|who|can you|could you|would you|do you|are you|is there|have you)[^?]+\?)/gi;
       const questions = msg.content.match(questionRegex) || [];
-      
-      questions.forEach(question => {
+
+      questions.forEach((question) => {
         // Normalize the question to avoid minor variations
         const normalizedQuestion = question.toLowerCase().trim();
         conversationMemory.add(normalizedQuestion);
@@ -285,10 +302,10 @@ function updateConversationMemory(messages: Array<{ role: string; content: strin
 function getEnhancedSystemPrompt(): string {
   // If we have conversation memory, add it to the system prompt
   if (conversationMemory.size > 0) {
-    const questionsAsked = Array.from(conversationMemory).join('\n- ');
+    const questionsAsked = Array.from(conversationMemory).join("\n- ");
     return `${SYSTEM_PROMPT}\n\nIMPORTANT: You have already asked the following questions, do not ask them again:\n- ${questionsAsked}\n\nInstead, build on what you've learned from the user's responses.`;
   }
-  
+
   return SYSTEM_PROMPT;
 }
 
@@ -298,25 +315,30 @@ export async function getLearningPlanResponse(
   return makeOpenAIRequest(async () => {
     // Update conversation memory based on existing messages
     updateConversationMemory(messages);
-    
+
     // Use enhanced system prompt with memory of questions
     const enhancedSystemPrompt = getEnhancedSystemPrompt();
-    
+
     const response = await getOpenAIClient().chat.completions.create({
       // Choose your model:
       // e.g., "gpt-4", "gpt-3.5-turbo", or "gpt-4o" if available
       model: "gpt-4",
-      messages: [{ role: "system", content: enhancedSystemPrompt }, ...messages],
+      messages: [
+        { role: "system", content: enhancedSystemPrompt },
+        ...messages,
+      ],
       temperature: 0.7,
       max_tokens: 1500, // Adjust as needed
     });
 
     // Update memory with the new response
     if (response.choices[0].message.content) {
-      updateConversationMemory([{ 
-        role: "assistant", 
-        content: response.choices[0].message.content 
-      }]);
+      updateConversationMemory([
+        {
+          role: "assistant",
+          content: response.choices[0].message.content,
+        },
+      ]);
     }
 
     return (
