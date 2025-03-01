@@ -139,12 +139,12 @@ export class PgStorage implements IStorage {
     console.log("PgStorage: Storing feedback data:", insertFeedback);
     const query = `
       INSERT INTO feedbacks (
-        user_id, is_confident, learned_new, conversation, 
+        user_id, is_confident, learned_new, was_faster, conversation, 
         last_recommendation, chat_duration
       )
-      VALUES ($1, $2, $3, $4, $5, $6)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING id, user_id as "userId", is_confident as "isConfident", 
-                learned_new as "learnedNew", conversation, 
+                learned_new as "learnedNew", was_faster as "wasFaster", conversation, 
                 last_recommendation as "lastRecommendation", 
                 chat_duration as "chatDuration", 
                 created_at as "createdAt"
@@ -153,6 +153,7 @@ export class PgStorage implements IStorage {
       insertFeedback.userId, 
       insertFeedback.isConfident, 
       insertFeedback.learnedNew,
+      insertFeedback.wasFaster,
       insertFeedback.conversation,
       insertFeedback.lastRecommendation,
       insertFeedback.chatDuration

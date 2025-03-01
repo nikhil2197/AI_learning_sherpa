@@ -22,7 +22,8 @@ import { apiRequest } from "@/lib/queryClient";
 // Combine user info with feedback fields
 interface FeedbackForm extends InsertUser {
   isConfident: boolean;
-  learnedNew: boolean;
+  learnedNew: boolean | null; //Allow null for backward compatibility
+  wasFaster: boolean; //New field
   conversation: string;
 }
 
@@ -36,7 +37,8 @@ export default function Feedback() {
   const form = useForm<FeedbackForm>({
     resolver: zodResolver(insertUserSchema.extend({
       isConfident: z.boolean().default(false),
-      learnedNew: z.boolean().default(false),
+      learnedNew: z.boolean().nullable().default(null), //Allow null for backward compatibility
+      wasFaster: z.boolean().default(false), //New field
       conversation: z.string().optional(),
     })),
     defaultValues: {
@@ -44,7 +46,8 @@ export default function Feedback() {
       email: "",
       whatsappNumber: "",
       isConfident: false,
-      learnedNew: false,
+      learnedNew: null, //Allow null for backward compatibility
+      wasFaster: false, //New field
       conversation: "",
     },
   });
@@ -63,7 +66,8 @@ export default function Feedback() {
       await apiRequest("POST", "/api/feedback", {
         userId: user.id,
         isConfident: data.isConfident,
-        learnedNew: data.learnedNew,
+        learnedNew: data.learnedNew, // Preserve field for backward compatibility
+        wasFaster: data.wasFaster, //New field
         conversation: data.conversation,
         chatDuration,
       });
@@ -181,6 +185,27 @@ export default function Feedback() {
                       </FormItem>
                     )}
                   />
+
+                  <FormField
+                    control={form.control}
+                    name="wasFaster"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel>
+                            Was this conversation faster than expected?
+                          </FormLabel>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+
 
                   <FormField
                     control={form.control}

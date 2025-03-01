@@ -14,7 +14,8 @@ export const feedbacks = pgTable("feedbacks", {
   id: serial("id").primaryKey(),
   userId: serial("user_id").references(() => users.id),
   isConfident: boolean("is_confident").notNull(),
-  learnedNew: boolean("learned_new").notNull(),
+  learnedNew: boolean("learned_new"),
+  wasFaster: boolean("was_faster"),
   conversation: text("conversation"),
   lastRecommendation: text("last_recommendation"),
   chatDuration: integer("chat_duration"), // in seconds
@@ -37,6 +38,7 @@ export const insertFeedbackSchema = createInsertSchema(feedbacks)
     userId: true,
     isConfident: true,
     learnedNew: true,
+    wasFaster: true,
     conversation: true,
     lastRecommendation: true,
     chatDuration: true,
