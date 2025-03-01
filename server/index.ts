@@ -121,7 +121,7 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  // Use port 5000 for both production and development to match .replit configuration
+  // Use port 3000 instead of 5000
   const startServer = (port: number) => {
     return new Promise((resolve, reject) => {
       server
@@ -149,10 +149,10 @@ app.use((req, res, next) => {
   };
 
   try {
-    await startServer(5000);
-  } catch (err) {
+    await startServer(3000);
+  } catch (err: any) {
     if (err.code === "EADDRINUSE") {
-      console.error("Port 5000 is in use. Please ensure no other instance is running.");
+      console.error("Port 3000 is in use. Please ensure no other instance is running.");
       process.exit(1);
     } else {
       console.error("Failed to start server:", err);
