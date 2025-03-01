@@ -58,15 +58,19 @@ export async function registerRoutes(app: Express, sessionMiddleware: any): Prom
   // Store feedback without requiring session
   app.post("/api/users", async (req, res) => {
     try {
+      console.log("Received user data:", req.body);
       const userData = insertUserSchema.parse(req.body);
+      console.log("Validated user data:", userData);
       const user = await storage.createUser(userData);
+      console.log("User created successfully:", user);
       res.json(user);
     } catch (err) {
+      console.error("Error creating user:", err);
       if (err instanceof ZodError) {
-        res.status(400).json({ message: "Invalid user data" });
+        res.status(400).json({ message: "Invalid user data", errors: err.errors });
         return;
       }
-      throw err;
+      res.status(500).json({ message: "Failed to create user" });
     }
   });
 
@@ -81,10 +85,10 @@ export async function registerRoutes(app: Express, sessionMiddleware: any): Prom
     } catch (err) {
       console.error("Error storing feedback:", err);
       if (err instanceof ZodError) {
-        res.status(400).json({ message: "Invalid feedback data" });
+        res.status(400).json({ message: "Invalid feedback data", errors: err.errors });
         return;
       }
-      throw err;
+      res.status(500).json({ message: "Failed to store feedback" });
     }
   });
 

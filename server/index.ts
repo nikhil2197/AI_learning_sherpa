@@ -111,8 +111,8 @@ app.use((req, res, next) => {
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
+    console.error("Application error:", err);
     res.status(status).json({ message });
-    throw err;
   });
 
   if (app.get("env") === "development") {
@@ -122,19 +122,41 @@ app.use((req, res, next) => {
   }
 
   // Use port 5000 for both production and development to match .replit configuration
-  const port = 5000;
-
-  server
-    .listen(
-      {
-        port: port,
-        host: "0.0.0.0",
-      },
-      () => {
-        log(`serving on port ${port}`);
-      },
-    )
-    .on("error", (err: any) => {
-      console.error("Server error:", err);
+  const startServer = (port: number) => {
+    return new Promise((resolve, reject) => {
+      server
+        .listen(
+          {
+            port: port,
+            host: "0.0.0.0",
+          },
+          () => {
+            log(`Server started successfully on port ${port}`);
+            resolve(port);
+          },
+        )
+        .on("error", (err: any) => {
+          if (err.code === "EADDRINUSE") {
+            console.warn(`Port ${port} is busy, attempting to close existing connections...`);
+            server.close();
+            reject(err);
+          } else {
+            console.error("Server startup error:", err);
+            reject(err);
+          }
+        });
     });
+  };
+
+  try {
+    await startServer(5000);
+  } catch (err) {
+    if (err.code === "EADDRINUSE") {
+      console.error("Port 5000 is in use. Please ensure no other instance is running.");
+      process.exit(1);
+    } else {
+      console.error("Failed to start server:", err);
+      process.exit(1);
+    }
+  }
 })();
